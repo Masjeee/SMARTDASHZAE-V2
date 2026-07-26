@@ -374,6 +374,8 @@
                             headers.forEach((h, idx) => { obj[h] = perfList[i][idx]; });
                             rows.push(obj);
                         }
+                        
+                        // Mengambil 3 baris terakhir dari sheet (data paling bawah/terbaru) lalu dibalik agar yang paling baru jadi #1
                         let latestThree = rows.slice(-3).reverse();
                         
                         let cards = document.querySelectorAll('#latest-content-container .stat-card');
@@ -383,7 +385,8 @@
                                 let link = cards[index].querySelector('.ig-link');
                                 
                                 let title = item["ID_Konten"] || `Konten Instagram ${index + 1}`;
-                                let url = item["URI_Konten"] || "https://www.instagram.com/astratoltamer";
+                                // Mengambil langsung dari kolom URL_Konten yang berisi permalink spesifik postingan
+                                let url = item["URL_Konten"] || "https://www.instagram.com/astratoltamer";
 
                                 if (caption) caption.innerText = title;
                                 if (link) link.href = url;
