@@ -18,7 +18,7 @@
                 <div class="brand-logo-container">
                     <img src="assets/icons/Logo.svg" alt="Logo Smartdash" class="brand-logo">
                 </div>
-                <button id="sidebar-close" class="sidebar-close-btn" aria-label="Tutup Menu" style="display: none; background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; padding: 4px 8px;">
+                <button id="sidebar-close" class="sidebar-close-btn" aria-label="Tutup Menu">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -35,7 +35,22 @@
                 </div>
             </div>
 
-            <div class="menu-section">
+            <!-- FILTER TANGGAL DI DALAM SIDEBAR -->
+            <div class="menu-section" style="margin-top: 10px;">
+                <div class="submenu-container open" style="max-height: none; padding-left: 0;">
+                    <div class="filter-box">
+                        <label>DARI TANGGAL</label>
+                        <input type="date" id="filter-start">
+                        
+                        <label style="margin-top: 6px;">SAMPAI TANGGAL</label>
+                        <input type="date" id="filter-end">
+
+                        <button class="filter-btn" style="width: 100%; margin-top: 8px;">Terapkan Filter</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section" style="margin-top: 15px;">
                 <div class="menu-label">Others</div>
                 <div class="menu-list">
                     <a href="aktivitas.html" class="menu-item">
@@ -72,7 +87,7 @@
                 </button>
                 <div class="main-logo-container">
                     <img src="assets/icons/SmartDash Panjang.svg" alt="Logo Smartdash">
-                    <p>Pesan dan komplain pelanggan terintegrasi.</p>    
+                    <p>Pesan dan komplain pelanggan terintegrasi.</p>  
                 </div>
             </div>
         </div>
@@ -98,18 +113,18 @@
 
     <!-- Elemen Overlay untuk Mobile -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
     <style>
-    /* CSS Inline Darurat: Langsung hitam jika localStorage bernilai dark */
         html.dark-mode, body.dark-mode {
-            background-color: #0f172a !important; /* Sesuaikan dengan warna background dark mode kamu */
+            background-color: #0f172a !important;
             color: #f1f5f9 !important;
         }
     </style>
+
     <script>
+        // Cek dan terapkan Tema Dark Mode
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
-        }
-        if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
 
@@ -155,11 +170,10 @@
                     }
 
                     if (allData.length === 0) {
-                        tbody.innerHTML = `<tr><td colspan="5" class="empty-state">Tidak ada data sama sekali di spreadsheet.</td></tr>`;
+                        tbody.innerHTML = `<tr><td colspan="5" class="empty-state" style="text-align: center; padding: 20px;">Tidak ada data sama sekali di spreadsheet.</td></tr>`;
                         return;
                     }
 
-                    tbody.innerHTML = "";
                     allData.forEach((r, index) => {
                         let tipe = r["Tipe"] || "Direct Message";
                         let badgeClass = tipe.toLowerCase().includes("komentar") ? "badge-komentar" : "badge-dm";
@@ -189,7 +203,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('table-body').innerHTML = `<tr><td colspan="5" class="empty-state" style="color: #B43F3F;">Gagal memuat data dari Google Spreadsheet.</td></tr>`;
+                    document.getElementById('table-body').innerHTML = `<tr><td colspan="5" class="empty-state" style="color: #B43F3F; text-align: center; padding: 20px;">Gagal memuat data dari Google Spreadsheet.</td></tr>`;
                 });
         });
 

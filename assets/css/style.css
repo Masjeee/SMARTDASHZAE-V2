@@ -687,6 +687,15 @@ body.dark-mode .table-card h3 {
     font-weight: 500 !important;
 }
 
+body.dark-mode .table-card table th,
+body.dark-mode .table-card table td {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .table-header-title {
+    color: #ffffff !important;
+}
+
 body.dark-mode th {
     color: #ffffff !important;
     text-transform: none !important;
@@ -786,4 +795,24 @@ body.dark-mode #sidebar-close span {
     .charts-grid {
         grid-template-columns: 1fr !important;
     }
+}
+
+/* Styling Kontras Teks Tabel untuk Semua Mode */
+table th {
+    color: #475569 !important; /* Warna teks header tabel terang & jelas */
+    font-weight: 700 !important;
+}
+
+table td {
+    color: #1e293b !important; /* Warna teks isi tabel terang (Light Mode) dibuat tegas */
+    font-weight: 500 !important;
+}
+
+/* Penyesuaian khusus saat Dark Mode aktif */
+body.dark-mode table th {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode table td {
+    color: #f1f5f9 !important; /* Teks isi tabel putih terang di Dark Mode */
 }
