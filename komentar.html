@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Pesan Masuk (DM) - SMARTDASH</title>
+    <title>Data Komentar - SMARTDASH</title>
     <link rel="icon" type="image/png" href="assets/icons/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
+    /* Paksa Sidebar Timeline & Log Box agar identik dengan Dashboard */
         .submenu-container {
             max-height: 0 !important;
             overflow: hidden !important;
@@ -118,18 +119,17 @@
                     </a>
                     <!-- Submenu Filter Tanggal -->
                     <div class="submenu-container" id="timelineSubmenu">
-                        <div class="filter-box">
-                            <label>DARI TANGGAL</label>
-                            <input type="date" id="startDate">
-                            
-                            <label>SAMPAI TANGGAL</label>
-                            <input type="date" id="endDate">
-                            
-                            <button class="filter-btn" id="applyFilterBtn">Terapkan Filter</button>
-                        </div>
+                        <label>DARI TANGGAL</label>
+                        <input type="date" id="startDate">
+                        
+                        <label>SAMPAI TANGGAL</label>
+                        <input type="date" id="endDate">
+                        
+                        <button class="filter-btn" id="applyFilterBtn">Terapkan Filter</button>
                     </div>
                 </div>
             </div>
+        </div>
 
             <div class="menu-section">
                 <div class="menu-label">Others</div>
@@ -137,10 +137,10 @@
                     <a href="aktivitas.html" class="menu-item">
                         <img src="assets/icons/Aktivitas.svg" alt="Icon" class="menu-icon"> Aktivitas Harian
                     </a>
-                    <a href="pesan.html" class="menu-item active">
+                    <a href="pesan.html" class="menu-item">
                         <img src="assets/icons/message.svg" alt="Icon" class="menu-icon"> Pesan (DM)
                     </a>
-                    <a href="komentar.html" class="menu-item">
+                    <a href="komentar.html" class="menu-item active">
                         <img src="assets/icons/message.svg" alt="Icon" class="menu-icon"> Komentar
                     </a>
                     <a href="setting.html" class="menu-item">
@@ -171,14 +171,14 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="main-logo-container">
-                    <img src="assets/icons/SmartDash Panjang.svg" alt="Smart Dash Logo" class="brand-logo">
-                    <p>System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>
+                    <img src="assets/icons/SmartDash Panjang.svg" alt="Smart Dash Logo" class="brand-logo" style="height: 32px;">
                 </div>
             </div>
         </div>
+        <p style="color: #64748b; margin-bottom: 20px;">System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>
         
         <!-- Kategori Komplain Cards -->
-        <div class="section-title">Kategori Komplain Pesan (DM)</div>
+        <div class="section-title">Kategori Komplain Komentar</div>
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>LALU LINTAS</h3>
@@ -195,32 +195,32 @@
         </div>
 
         <!-- Visualisasi Grafik -->
-        <div class="section-title">Visualisasi Data Pesan (DM)</div>
+        <div class="section-title">Visualisasi Data Komentar</div>
         <div class="charts-grid">
             <div class="chart-card">
-                <h3>Tren Pesan Masuk (DM)</h3>
+                <h3>Tren Komentar Masuk</h3>
                 <div class="chart-container">
-                    <canvas id="lineChartPesan"></canvas>
+                    <canvas id="lineChartKomentar"></canvas>
                 </div>
             </div>
             <div class="chart-card">
                 <h3>Distribusi Kategori</h3>
                 <div class="chart-container">
-                    <canvas id="donutCategoryPesan"></canvas>
+                    <canvas id="donutCategoryKomentar"></canvas>
                 </div>
             </div>
             <div class="chart-card">
                 <h3>Proposisi Tonality</h3>
                 <div class="chart-container">
-                    <canvas id="donutSentimentPesan"></canvas>
+                    <canvas id="donutSentimentKomentar"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Tabel Data Pesan -->
-        <div class="section-title" style="margin-top: 30px;">Daftar Tabel Pesan (DM)</div>
+        <!-- Tabel Data Komentar -->
+        <div class="section-title" style="margin-top: 30px;">Daftar Tabel Komentar</div>
         <div class="stat-card" style="padding: 20px; overflow-x: auto;">
-            <table width="100%" id="table-pesan" border="0" cellpadding="10" cellspacing="0">
+            <table width="100%" id="table-komentar" border="0" cellpadding="10" cellspacing="0">
                 <thead>
                     <tr style="text-align: left; border-bottom: 2px solid #e2e8f0; color: #173B45;">
                         <th>Tanggal</th>
@@ -232,7 +232,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td colspan="6" style="text-align: center;">Memuat data pesan...</td></tr>
+                    <tr><td colspan="6" style="text-align: center;">Memuat data komentar...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -242,7 +242,7 @@
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
     <script>
-        let globalPesanRows = [];
+        let globalKomentarRows = [];
         let lineChartInst = null;
         let categoryChartInst = null;
         let sentimentChartInst = null;
@@ -287,23 +287,23 @@
                 applyFilterBtn.addEventListener('click', prosesFilterDanUpdate);
             }
 
-            initChartsPesan();
+            initChartsKomentar();
 
-            // Fetch Data DM
+            // Fetch Data Komentar
             fetch(WEB_APP_URL)
                 .then(res => res.json())
                 .then(data => {
-                    let dmList = data.dm || [];
-                    if (dmList.length > 1) {
-                        let headers = dmList[0];
-                        globalPesanRows = [];
-                        for (let i = 1; i < dmList.length; i++) {
+                    let komList = data.komentar || [];
+                    if (komList.length > 1) {
+                        let headers = komList[0];
+                        globalKomentarRows = [];
+                        for (let i = 1; i < komList.length; i++) {
                             let obj = {};
-                            headers.forEach((h, idx) => { obj[h] = dmList[i][idx]; });
-                            globalPesanRows.push(obj);
+                            headers.forEach((h, idx) => { obj[h] = komList[i][idx]; });
+                            globalKomentarRows.push(obj);
                         }
 
-                        let dates = globalPesanRows.map(r => r.Tanggal).filter(Boolean).sort();
+                        let dates = globalKomentarRows.map(r => r.Tanggal).filter(Boolean).sort();
                         if (dates.length > 0) {
                             document.getElementById('startDate').value = dates[0].substring(0, 10);
                             document.getElementById('endDate').value = dates[dates.length - 1].substring(0, 10);
@@ -311,17 +311,17 @@
                         }
                     }
                 })
-                .catch(err => console.error("Gagal memuat data pesan:", err));
+                .catch(err => console.error("Gagal memuat data komentar:", err));
         });
 
-        function initChartsPesan() {
-            const ctxLine = document.getElementById('lineChartPesan').getContext('2d');
+        function initChartsKomentar() {
+            const ctxLine = document.getElementById('lineChartKomentar').getContext('2d');
             lineChartInst = new Chart(ctxLine, {
                 type: 'line',
                 data: { 
                     labels: [], 
                     datasets: [{ 
-                        label: 'Total Pesan', 
+                        label: 'Total Komentar', 
                         data: [], 
                         borderColor: '#FF8225',          
                         backgroundColor: 'rgba(255, 130, 37, 0.1)',
@@ -353,7 +353,7 @@
                 }
             });
 
-            const ctxCategory = document.getElementById('donutCategoryPesan').getContext('2d');
+            const ctxCategory = document.getElementById('donutCategoryKomentar').getContext('2d');
             categoryChartInst = new Chart(ctxCategory, {
                 type: 'doughnut',
                 data: { 
@@ -377,7 +377,7 @@
                 }
             });
 
-            const ctxSentiment = document.getElementById('donutSentimentPesan').getContext('2d');
+            const ctxSentiment = document.getElementById('donutSentimentKomentar').getContext('2d');
             sentimentChartInst = new Chart(ctxSentiment, {
                 type: 'doughnut',
                 data: { 
@@ -415,16 +415,16 @@
             let endDate = new Date(endStr);
             endDate.setHours(23, 59, 59, 999);
 
-            let filtered = globalPesanRows.filter(r => {
+            let filtered = globalKomentarRows.filter(r => {
                 if (!r.Tanggal) return false;
                 let d = new Date(r.Tanggal);
                 return d >= startDate && d <= endDate;
             });
 
-            updateUIPesan(filtered);
+            updateUIKomentar(filtered);
         }
 
-        function updateUIPesan(rows) {
+        function updateUIKomentar(rows) {
             let countLalin = rows.filter(r => (r["Kategori"] || "").toLowerCase().includes("lalu lintas") || (r["Kategori"] || "").toLowerCase().includes("lalin")).length;
             let countFasilitas = rows.filter(r => (r["Kategori"] || "").toLowerCase().includes("fasilitas")).length;
             let countStruk = rows.filter(r => (r["Kategori"] || "").toLowerCase().includes("struk")).length;
@@ -477,7 +477,7 @@
             }
 
             // Render Tabel
-            let tbody = document.querySelector("#table-pesan tbody");
+            let tbody = document.querySelector("#table-komentar tbody");
             tbody.innerHTML = "";
             if (rows.length > 0) {
                 rows.forEach(row => {
