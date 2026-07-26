@@ -1,5 +1,5 @@
-/* =================================================
-    RESET & BASE STYLES
+/* =================================================================ro
+   1. RESET & BASE STYLES
 ================================================= */
 * {
     box-sizing: border-box;
@@ -20,7 +20,7 @@ body {
 }
 
 /* =================================================
-    SIDEBAR KIRI & COLLAPSIBLE
+   2. SIDEBAR KIRI & COLLAPSIBLE
 ================================================= */
 .sidebar {
     width: 280px;
@@ -37,7 +37,7 @@ body {
     top: 0;
     left: 0;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out, padding 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    z-index: 1000;
+    z-index: 1001;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.02);
 }
 
@@ -50,30 +50,73 @@ body {
     width: 240px;
 }
 
-.brand-logo-container {
+.sidebar-header-mobile {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Brand Logo */
+.brand-logo-container {
+    display: flex !important;
+    align-items: center !important;
 }
 
 .brand-logo {
-    max-width: 140px;
-    height: auto;
+    width: 120px !important;
+    height: auto !important;
+    max-height: 40px !important;
+    object-fit: contain !important;
+    display: block !important;
 }
 
-/* Tombol Toggle Sidebar */
+/* Tombol Toggle & Close Sidebar */
 .sidebar-toggle-btn {
-    background: none;
-    border: none;
-    color: #173B45;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: background 0.2s;
+    background: none !important;
+    border: none !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    color: #173B45 !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    transition: background 0.2s !important;
 }
 
 .sidebar-toggle-btn:hover {
-    background-color: #f1f5f9;
+    background-color: #f1f5f9 !important;
+}
+
+.sidebar-close-btn {
+    display: none; /* Sembunyi di PC/Laptop */
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* Styling Khusus Tombol X (Close) Sidebar agar Terlihat Jelas */
+#sidebar-close {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border-radius: 50% !important;
+    padding: 8px !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#sidebar-close img, 
+#sidebar-close svg, 
+#sidebar-close span {
+    filter: brightness(0) saturate(100%) !important; 
+    opacity: 1 !important;
 }
 
 /* Kondisi saat Sidebar Ditutup (Collapsed) */
@@ -92,8 +135,31 @@ body.sidebar-collapsed .main-content {
     width: 100% !important;
 }
 
+/* Latar Gelap Transparan saat Sidebar Buka di Mobile */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998 !important; /* Posisikan di bawah sidebar */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* PENTING: Supaya tidak bisa diklik saat tertutup */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Hanya aktif dan bisa menangkap klik saat sidebar muncul di mobile */
+@media screen and (max-width: 768px) {
+    body:not(.sidebar-collapsed) .sidebar-overlay {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important; /* Aktifkan klik hanya saat terbuka */
+    }
+}
 /* =================================================
-    NAVIGASI MENU
+   3. NAVIGASI MENU
 ================================================= */
 .menu-section {
     display: flex;
@@ -121,14 +187,13 @@ body.sidebar-collapsed .main-content {
     align-items: center;
     gap: 12px;
     padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px !important;
+    font-weight: 500;
     text-decoration: none;
     color: #475569;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+    font-family: 'Epilogue', sans-serif;
 }
 
 .menu-item:hover {
@@ -141,14 +206,16 @@ body.sidebar-collapsed .main-content {
     color: #FF8225;
 }
 
-.menu-icon {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
+.menu-icon,
+.menu-item img {
+    width: 18px !important;
+    height: 18px !important;
+    object-fit: contain !important;
+    flex-shrink: 0;
 }
 
 /* =================================================
-    SUBMENU FILTER TANGGAL (ACCORDION)
+   4. SUBMENU FILTER TANGGAL (ACCORDION)
 ================================================= */
 .submenu-container {
     max-height: 0;
@@ -180,7 +247,6 @@ body.sidebar-collapsed .main-content {
     font-size: 10px;
     font-weight: 700;
     color: #173B45;
-    text-transform: none;
 }
 
 .filter-box input[type="date"] {
@@ -204,7 +270,6 @@ body.sidebar-collapsed .main-content {
     cursor: pointer;
     transition: background 0.2s;
     text-align: center;
-    width: auto;
     display: inline-block;
 }
 
@@ -213,7 +278,7 @@ body.sidebar-collapsed .main-content {
 }
 
 /* =================================================
-    FOOTER SIDEBAR (USER & LOGOUT)
+   5. FOOTER SIDEBAR (USER & LOGOUT)
 ================================================= */
 .sidebar-footer {
     border-top: 1px solid #f1f5f9;
@@ -284,7 +349,7 @@ body.sidebar-collapsed .main-content {
 }
 
 /* =================================================
-    KONTEN UTAMA DASHBOARD
+   6. KONTEN UTAMA DASHBOARD
 ================================================= */
 .main-content {
     flex-grow: 1;
@@ -299,18 +364,19 @@ body.sidebar-collapsed .main-content {
 }
 
 .top-bar {
-    margin-bottom: 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     gap: 10px;
+    margin-bottom: 24px;
 }
 
 .top-bar-left {
     display: flex;
     align-items: center;
     gap: 12px;
+    flex: 1;
 }
 
 .top-bar h1, .top-bar h2 {
@@ -321,11 +387,30 @@ body.sidebar-collapsed .main-content {
     color: #1e293b;
 }
 
-.top-bar p {
+.main-logo-container img {
+    max-width: 180px !important;
+    height: auto !important;
+    display: block !important;
+}
+
+.main-logo-container p {
     font-size: 13px;
     color: #64748b;
     margin-top: 4px;
-    font-weight: 400 !important;
+    font-weight: 400;
+}
+
+.live-badge {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    font-family: 'Epilogue', sans-serif;
+    white-space: nowrap;
 }
 
 .section-title {
@@ -361,8 +446,6 @@ body.sidebar-collapsed .main-content {
     font-size: 11px;
     font-weight: 700;
     color: #64748b;
-    text-transform: none;
-    letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
 
@@ -387,13 +470,6 @@ body.sidebar-collapsed .main-content {
     margin-top: 16px;
     margin-bottom: 40px;
     width: 100%;
-    box-sizing: border-box;
-}
-
-.charts-grid .chart-card {
-    min-width: 0;
-    width: 100%;
-    overflow: hidden;
 }
 
 .chart-card {
@@ -405,6 +481,9 @@ body.sidebar-collapsed .main-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
 }
 
 .chart-card h3 {
@@ -412,7 +491,6 @@ body.sidebar-collapsed .main-content {
     font-weight: 700;
     color: #173B45;
     margin-bottom: 12px;
-    text-transform: none;
 }
 
 .chart-container {
@@ -421,23 +499,7 @@ body.sidebar-collapsed .main-content {
     width: 100%;
 }
 
-/* Kartu Pengaturan & Tabel */
-.settings-card, .table-card {
-    background: #ffffff;
-    border-radius: 14px;
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
-}
-
-.settings-card {
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-/* Pastikan .table-card memiliki display dan lebar penuh */
+/* Tabel & Pengaturan */
 .table-card {
     background: #ffffff;
     border-radius: 14px;
@@ -456,7 +518,6 @@ body.sidebar-collapsed .main-content {
     border-bottom: 1px solid #f1f5f9;
 }
 
-/* Styling Seragam untuk Seluruh Tabel di Dashboard */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -472,7 +533,6 @@ th {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 1px solid #e2e8f0;
-    font-family: 'Epilogue', sans-serif;
 }
 
 td {
@@ -481,7 +541,6 @@ td {
     font-weight: 400;
     color: #334155;
     border-bottom: 1px solid #f1f5f9;
-    font-family: 'Epilogue', sans-serif;
 }
 
 tr:last-child td {
@@ -490,6 +549,18 @@ tr:last-child td {
 
 tr:hover {
     background-color: #fafafa;
+}
+
+.settings-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
 }
 
 .setting-info h4 {
@@ -521,7 +592,7 @@ tr:hover {
 }
 
 /* =================================================
-    DARK MODE CONFIGURATIONS
+   7. DARK MODE CONFIGURATIONS
 ================================================= */
 body.dark-mode {
     background-color: #0f172a !important;
@@ -609,32 +680,29 @@ body.dark-mode h2,
 body.dark-mode h3,
 body.dark-mode h4,
 body.dark-mode .section-title,
-body.dark-mode .ig-section-title,
 body.dark-mode .table-header-title,
-body.dark-mode .table-header-title,
-body.dark-mode div[class*="table-title"],
-body.dark-mode .table-card h3,
-body.dark-mode [class*="section-title"] {
+body.dark-mode .table-card h3 {
     color: #ffffff !important;
     text-transform: none !important;
     font-weight: 500 !important;
 }
+
 body.dark-mode th {
-    color: #173B45 !important;
+    color: #ffffff !important;
     text-transform: none !important;
 }
 
-/* Memperjelas warna teks baris dan paragraf di mode gelap */
 body.dark-mode td,
 body.dark-mode p,
 body.dark-mode .note {
     color: #cbd5e1 !important;
 }
 
-/* Ikon Menu Menjadi Putih di Dark Mode */
+/* Logo & Ikon Menjadi Putih di Dark Mode */
 body.dark-mode .menu-item img,
 body.dark-mode .sidebar img.menu-icon,
-body.dark-mode .brand-logo {
+body.dark-mode .brand-logo,
+body.dark-mode .main-logo-container img {
     filter: brightness(0) invert(1) !important;
 }
 
@@ -644,111 +712,7 @@ body.dark-mode .live-badge {
     color: #e2e8f0 !important;
 }
 
-.live-badge {
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #475569;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    font-family: 'Epilogue', sans-serif;
-    white-space: nowrap;
-}
-
-body.sidebar-collapsed .sidebar {
-    transform: translateX(-100%);
-    width: 0;
-    padding-left: 0;
-    padding-right: 0;
-    border-right: none;
-    overflow: hidden;
-    opacity: 0;
-}
-
-body.sidebar-collapsed .main-content {
-    margin-left: 0 !important;
-    width: 100% !important;
-}
-
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 24px;
-}
-
-.top-bar-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-}
-
-.main-logo-container img {
-    max-width: 200px !important;
-    height: auto;
-    display: block;
-}
-
-.main-logo-container p {
-    font-size: 13px;
-    color: #64748b;
-    margin-top: 4px;
-    font-weight: 400;
-}
-
-/* Seragamkan ukuran logo banner di semua halaman */
-.main-logo-container img {
-    max-width: 180px !important;
-    height: auto !important;
-    display: block !important;
-}
-
-/* Seragamkan warna dan gaya tombol hamburger di semua halaman */
-.sidebar-toggle-btn {
-    background: none !important;
-    border: none !important;
-    font-size: 20px !important;
-    cursor: pointer !important;
-    color: #173B45 !important; /* Sesuaikan warna konsisten yang diinginkan, misal warna gelap utama */
-    padding: 4px 8px !important;
-    border-radius: 6px !important;
-    transition: background 0.2s !important;
-}
-
-.sidebar-toggle-btn:hover {
-    background-color: #f1f5f9 !important;
-}
-
-/* Styling Seragam untuk Seluruh Menu Item di Sidebar */
-.menu-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px !important; /* Ukuran teks menu dipatok seragam */
-    font-weight: 500;
-    text-decoration: none;
-    color: #475569;
-    transition: background 0.2s, color 0.2s;
-    font-family: 'Epilogue', sans-serif;
-}
-
-/* Seragamkan ukuran semua ikon di dalam menu sidebar */
-.menu-item img, 
-.menu-icon {
-    width: 18px !important;
-    height: 18px !important;
-    object-fit: contain !important;
-    flex-shrink: 0;
-}
-
-/* Mengatur Teks Kartu Statistik agar Putih, Normal, dan Tidak Uppercase di Dark Mode */
+/* Penyesuaian Kartu Statistik di Dark Mode */
 body.dark-mode .stat-card h3 {
     color: #ffffff !important;
     font-size: 13px !important;
@@ -760,9 +724,21 @@ body.dark-mode .stat-card .value {
     color: #ffffff !important;
 }
 
-/* Pengaturan Responsif untuk Layar HP / Mobile (Maksimal Lebar 768px) */
+/* Pengaturan Tombol X di Dark Mode */
+body.dark-mode #sidebar-close {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode #sidebar-close img,
+body.dark-mode #sidebar-close svg,
+body.dark-mode #sidebar-close span {
+    filter: brightness(0) invert(1) !important;
+}
+
+/* =================================================
+   8. RESPONSIF LAYAR HP / MOBILE (MAX 768px)
+================================================= */
 @media screen and (max-width: 768px) {
-    /* Sidebar disembunyikan secara default di HP */
     .sidebar {
         transform: translateX(-100%);
         position: fixed;
@@ -770,19 +746,25 @@ body.dark-mode .stat-card .value {
         transition: transform 0.3s ease;
     }
 
-    /* Ketika sidebar aktif/dibuka lewat tombol hamburger */
     body.sidebar-expanded .sidebar,
     body:not(.sidebar-collapsed) .sidebar {
         transform: translateX(0);
     }
 
-    /* Konten utama mengambil penuh lebar layar HP */
+    .sidebar-close-btn {
+        display: block !important;
+    }
+
+    body:not(.sidebar-collapsed) .sidebar-overlay {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
     .main-content {
         margin-left: 0 !important;
         padding: 15px !important;
     }
 
-    /* Header atas menyesuaikan agar tidak terlalu padat */
     .top-bar {
         flex-direction: column;
         align-items: flex-start !important;
@@ -797,116 +779,11 @@ body.dark-mode .stat-card .value {
         align-self: flex-end;
     }
 
-    /* Kartu statistik atau tabel menyesuaikan lebar layar */
     .stats-grid {
         grid-template-columns: 1fr !important;
     }
-}
 
-/* Styling Tombol Close di Sidebar */
-.sidebar-header-mobile {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.sidebar-close-btn {
-    display: none; /* Sembunyi di PC/Laptop */
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 22px;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-}
-
-/* Latar Gelap Transparan saat Sidebar Buka di Mobile */
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* Pengaturan Khusus Tampilan Mobile (Maksimal Lebar 768px) */
-@media screen and (max-width: 768px) {
-    .sidebar-close-btn {
-        display: block !important; /* Tampil di HP */
+    .charts-grid {
+        grid-template-columns: 1fr !important;
     }
-
-    .sidebar {
-        z-index: 1000 !important;
-    }
-
-    /* Tampilkan Overlay saat sidebar aktif di mobile */
-    body:not(.sidebar-collapsed) .sidebar-overlay {
-        opacity: 1;
-        visibility: visible;
-    }
-}
-
-.brand-logo-container {
-    display: flex !important;
-    align-items: center !important;
-}
-
-.brand-logo {
-    width: 120px !important;
-    height: auto !important;
-    max-height: 40px !important;
-    object-fit: contain !important;
-    display: block !important;
-}
-
-.sidebar {
-    z-index: 1001 !important; /* Sidebar berada di lapisan paling atas */
-}
-
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000 !important; /* Overlay ada di bawah sidebar, tapi di atas konten lain */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* Tampilkan overlay hanya saat sidebar terbuka di layar mobile */
-@media screen and (max-width: 768px) {
-    body:not(.sidebar-collapsed) .sidebar-overlay {
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-}
-
-body.dark-mode .brand-logo,
-body.dark-mode .main-logo-container img {
-    filter: brightness(0) invert(1) !important;
-}
-
-/* Styling Otomatis untuk Ikon Tombol 'X' pada Sidebar */
-/* Asumsi tombol 'X' memiliki class .close-btn atau container pembungkusnya */
-.sidebar-close-btn img, 
-.main-menu-close-icon {
-    /* Efek standar di Light Mode (biarkan warna asli, jika gelap) */
-    filter: none; 
-}
-
-/* Saat Dark Mode aktif, ubah ikon menjadi putih terang */
-body.dark-mode .sidebar-close-btn img,
-body.dark-mode .main-menu-close-icon {
-    /* Membalikkan warna (invert) dari gelap menjadi putih */
-    filter: brightness(0) invert(1); 
 }
