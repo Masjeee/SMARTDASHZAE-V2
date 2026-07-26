@@ -248,7 +248,9 @@ function updateDashboardUI(rows) {
     rows.forEach(r => {
         let tgl = r["Tanggal"];
         if (tgl) {
-            dateCounts[tgl] = (dateCounts[tgl] || 0) + 1;
+            // Tambahkan .substring(0, 10) di sini agar format ISO terpotong jadi YYYY-MM-DD
+            let cleanDate = tgl.toString().substring(0, 10);
+            dateCounts[cleanDate] = (dateCounts[cleanDate] || 0) + 1;
         }
     });
 
