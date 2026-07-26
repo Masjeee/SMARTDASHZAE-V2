@@ -267,7 +267,7 @@
             </div>
         </div>
 
-        <!-- SECTION: 3 KONTEN TERBARU PERFORMANCE (Bentuk Card Rapi) -->
+        <!-- SECTION: 3 KONTEN TERBARU PERFORMANCE -->
         <div class="section-title" style="margin-top: 35px;">
             <i class="fab fa-instagram" style="color: #E1306C; font-size: 18px; margin-right: 6px;"></i> 3 Konten Terbaru Instagram @astratoltamer
         </div>
@@ -298,6 +298,11 @@
 
     <!-- Skrip Internal Utama -->
     <script>
+        // Fungsi placeholder untuk menghindari error ReferenceError
+        function updateMessageTotals(startDate = '', endDate = '') {
+            // Logika pemuatan total pesan dari Apps Script dapat ditaruh di sini jika diperlukan
+        }
+
         // Cek Preferensi Tema & Sidebar dari LocalStorage (Anti-Glitch)
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
@@ -309,7 +314,7 @@
             document.body.classList.add('sidebar-collapsed');
         }
 
-        // Logika Toggle Sidebar, Tombol X, Overlay, dan Feed Instagram
+        // Logika Toggle Sidebar, Tombol X, dan Overlay
         document.addEventListener("DOMContentLoaded", function () {
             const toggleBtn = document.getElementById("sidebar-toggle");
             const closeBtn = document.getElementById("sidebar-close");
@@ -343,33 +348,6 @@
                 overlay.addEventListener("click", closeSidebar);
             }
 
-            // Fetch Feed Instagram Terbaru dengan Penanganan Error CORS yang Aman
-            fetch('https://masjeee.pythonanywhere.com/api/ig-latest', { mode: 'cors' })
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
-                .then(data => {
-                    const igCards = document.querySelectorAll('.ig-card');
-                    data.forEach((post, index) => {
-                        if (igCards[index]) {
-                            const img = igCards[index].querySelector('.ig-thumbnail');
-                            const caption = igCards[index].querySelector('.ig-caption');
-                            const link = igCards[index].querySelector('.ig-link');
-                
-                            if (img && post.image_url) img.src = post.image_url;
-                            if (caption) caption.innerText = post.caption;
-                            if (link) link.href = post.permalink;
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.warn('Catatan: Feed Instagram dibatasi oleh kebijakan CORS di server lokal:', error);
-                });
-
-            // Muat data pesan dan performance dari Apps Script
-            updateMessageTotals();
-
             const applyFilterBtn = document.getElementById('applyFilterBtn');
             if (applyFilterBtn) {
                 applyFilterBtn.addEventListener('click', function() {
@@ -380,65 +358,41 @@
             }
         });
 
-            const PERFORMANCE_WEB_URL = "https://script.google.com/macros/s/AKfycbzAEc4YWC5ztkdB1PBfiABHZUYB4BF8vExCA8jWel2YIaWZJgNzSG_6VPpccoC_6Hri/exec";
+        // Integrasi Pengambilan 3 Konten Terbaru dari Spreadsheet Apps Script
+        const PERFORMANCE_WEB_URL = "https://script.google.com/macros/s/AKfycbxkyMoq1XPIf4KYqE6uftvHOR6tHA_J-2AGJWuV1XQtG3MZblie1FRaCpbs01pzmg8c/exec";
 
-            document.addEventListener("DOMContentLoaded", function () {
-                fetch(PERFORMANCE_WEB_URL)
-                    .then(response => response.json())
-                    .then(data => {
-                        let perfList = data.performance || [];
-                        if (perfList.length > 1) {
-                            let headers = perfList[0];
-                            let rows = [];
-                            for (let i = 1; i < perfList.length; i++) {
-                                let obj = {};
-                                headers.forEach((h, idx) => { obj[h] = perfList[i][idx]; });
-                                rows.push(obj);
-                            }
-                            let latestThree = rows.slice(-3).reverse();
-                            
-                            let cards = document.querySelectorAll('#latest-content-container .stat-card');
-                            latestThree.forEach((item, index) => {
-                                if (cards[index]) {
-                                    let caption = cards[index].querySelector('.ig-caption');
-                                    let link = cards[index].querySelector('.ig-link');
-                                    
-                                    let title = item["ID_Konten"] || `Konten Instagram ${index + 1}`;
-                                    let url = item["URL_Konten"] || "https://www.instagram.com/astratoltamer";
-
-                                    if (caption) caption.innerText = title;
-                                    if (link) link.href = url;
-                                }
-                            });
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch(PERFORMANCE_WEB_URL)
+                .then(response => response.json())
+                .then(data => {
+                    let perfList = data.performance || [];
+                    if (perfList.length > 1) {
+                        let headers = perfList[0];
+                        let rows = [];
+                        for (let i = 1; i < perfList.length; i++) {
+                            let obj = {};
+                            headers.forEach((h, idx) => { obj[h] = perfList[i][idx]; });
+                            rows.push(obj);
                         }
-                    })
-                    .catch(err => console.error('Gagal memuat konten performance:', err));
-            });
+                        let latestThree = rows.slice(-3).reverse();
+                        
+                        let cards = document.querySelectorAll('#latest-content-container .stat-card');
+                        latestThree.forEach((item, index) => {
+                            if (cards[index]) {
+                                let caption = cards[index].querySelector('.ig-caption');
+                                let link = cards[index].querySelector('.ig-link');
+                                
+                                let title = item["ID_Konten"] || `Konten Instagram ${index + 1}`;
+                                let url = item["URI_Konten"] || "https://www.instagram.com/astratoltamer";
 
-        function renderLatestContent(items) {
-            let container = document.getElementById('latest-content-container');
-            if (!container) return;
-
-            let html = '';
-            items.forEach((item, index) => {
-                let title = item["ID_Konten"] || `Konten Instagram ${index + 1}`;
-                let url = item["URL_Konten"] || "#";
-                
-                html += `
-                    <div class="ig-card">
-                        <div class="ig-content" style="padding: 15px;">
-                            <p class="ig-caption" style="font-weight: 600; font-size: 13px; color: #173B45; margin-bottom: 8px;">
-                                <i class="fa-brands fa-instagram" style="color: #E1306C; margin-right: 6px;"></i> ${title}
-                            </p>
-                            <a href="${url}" target="_blank" class="ig-link" style="font-size: 12px; color: #FF8225; text-decoration: none; font-weight: 600;">
-                                Lihat di Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i>
-                            </a>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
+                                if (caption) caption.innerText = title;
+                                if (link) link.href = url;
+                            }
+                        });
+                    }
+                })
+                .catch(err => console.error('Gagal memuat konten performance:', err));
+        });
     </script>
 </body>
 </html>

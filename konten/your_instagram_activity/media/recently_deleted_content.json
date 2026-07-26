@@ -1,0 +1,209 @@
+{
+  "timestamp": 1782781450,
+  "media": [
+    
+  ],
+  "label_values": [
+    {
+      "label": "Comments settings",
+      "dict": [
+        
+      ]
+    },
+    {
+      "label": "Amount raised",
+      "value": "0"
+    },
+    {
+      "label": "Media",
+      "media": [
+        {
+          "uri": "media/posts/18125145370656714.webp",
+          "creation_timestamp": 1782781448,
+          "media_metadata": {
+            "photo_metadata": {
+              "exif_data": [
+                {
+                  "device_id": "android-151d398506a4d736",
+                  "camera_position": "unknown",
+                  "source_type": "6"
+                }
+              ]
+            },
+            "camera_metadata": {
+              "has_camera_metadata": false
+            }
+          },
+          "title": "",
+          "cross_post_source": {
+            "source_app": "FB"
+          }
+        }
+      ]
+    },
+    {
+      "label": "Draft",
+      "value": "False"
+    },
+    {
+      "label": "Marked as AI generated"
+    },
+    {
+      "label": "Paid partnership",
+      "value": "False"
+    },
+    {
+      "label": "Published",
+      "value": "True"
+    },
+    {
+      "label": "Expiry time",
+      "timestamp_value": 1782867848
+    },
+    {
+      "label": "Metadata",
+      "dict": [
+        {
+          "label": "duration",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "label": "Visibility"
+    },
+    {
+      "label": "Hide like and view counts"
+    },
+    {
+      "label": "Who can reply to your post"
+    },
+    {
+      "label": "Subtype",
+      "vec": [
+        
+      ]
+    },
+    {
+      "label": "Latitude",
+      "value": "0"
+    },
+    {
+      "label": "Longitude",
+      "value": "0"
+    },
+    {
+      "label": "Creation time",
+      "timestamp_value": 1782781450
+    },
+    {
+      "label": "File size in bytes",
+      "value": "0"
+    },
+    {
+      "label": "Original width",
+      "value": "1080"
+    },
+    {
+      "label": "Original height",
+      "value": "1920"
+    },
+    {
+      "label": "Is an advertisement",
+      "value": "False"
+    },
+    {
+      "label": "Reply approval required"
+    },
+    {
+      "label": "Update time",
+      "timestamp_value": 1782785083
+    },
+    {
+      "dict": [
+        
+      ],
+      "title": "Media"
+    },
+    {
+      "label": "Publish mode",
+      "value": "reel"
+    },
+    {
+      "label": "Is audio muted",
+      "value": "False"
+    },
+    {
+      "label": "Device name"
+    },
+    {
+      "label": "Marked as AI generated",
+      "value": "False"
+    },
+    {
+      "dict": [
+        
+      ],
+      "title": "Metadata"
+    },
+    {
+      "dict": [
+        
+      ],
+      "title": "Hashtags"
+    },
+    {
+      "dict": [
+        
+      ],
+      "title": "Place"
+    },
+    {
+      "dict": [
+        {
+          "dict": [
+            {
+              "label": "Number of hashtags"
+            },
+            {
+              "label": "Number of locations tagged"
+            },
+            {
+              "label": "Number of mentions"
+            },
+            {
+              "label": "Camera position",
+              "value": ""
+            },
+            {
+              "label": "Original media type",
+              "value": "1"
+            },
+            {
+              "label": "Update time",
+              "timestamp_value": 1782781458
+            },
+            {
+              "timestamp_value": 1782781458
+            }
+          ],
+          "title": ""
+        }
+      ],
+      "title": "Reel metadata"
+    },
+    {
+      "dict": [
+        
+      ],
+      "title": "Repost"
+    },
+    {
+      "dict": [
+        
+      ],
+      "title": "Brand partner"
+    }
+  ],
+  "fbid": "18125145370656714"
+}
