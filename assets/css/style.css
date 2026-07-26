@@ -799,13 +799,13 @@ body.dark-mode #sidebar-close span {
 
 /* Styling Kontras Teks Tabel untuk Semua Mode */
 table th {
-    color: #475569 !important; /* Warna teks header tabel terang & jelas */
-    font-weight: 700 !important;
+    color: #1e293b !important; /* Warna teks header tabel terang & jelas */
+    font-weight: 400 !important;
 }
 
 table td {
     color: #1e293b !important; /* Warna teks isi tabel terang (Light Mode) dibuat tegas */
-    font-weight: 500 !important;
+    font-weight: 400 !important;
 }
 
 /* Penyesuaian khusus saat Dark Mode aktif */
