@@ -895,3 +895,18 @@ body.dark-mode .brand-logo,
 body.dark-mode .main-logo-container img {
     filter: brightness(0) invert(1) !important;
 }
+
+/* Styling Otomatis untuk Ikon Tombol 'X' pada Sidebar */
+/* Asumsi tombol 'X' memiliki class .close-btn atau container pembungkusnya */
+.sidebar-close-btn img, 
+.main-menu-close-icon {
+    /* Efek standar di Light Mode (biarkan warna asli, jika gelap) */
+    filter: none; 
+}
+
+/* Saat Dark Mode aktif, ubah ikon menjadi putih terang */
+body.dark-mode .sidebar-close-btn img,
+body.dark-mode .main-menu-close-icon {
+    /* Membalikkan warna (invert) dari gelap menjadi putih */
+    filter: brightness(0) invert(1); 
+}
