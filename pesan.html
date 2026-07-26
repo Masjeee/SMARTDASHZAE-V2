@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan & Komplain - SMARTDASH Astra Infra Toll Road Tangerang-Merak</title>
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-header-mobile" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px;">
+                <div class="brand-logo-container">
+                    <img src="assets/icons/Logo.svg" alt="Logo Smartdash" class="brand-logo">
+                </div>
+                <button id="sidebar-close" class="sidebar-close-btn" aria-label="Tutup Menu" style="display: none; background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; padding: 4px 8px;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-label">Application</div>
+                <div class="menu-list">
+                    <a href="dashboard.html" class="menu-item">
+                        <img src="assets/icons/Dashboard.svg" alt="Icon" width="18" height="18"> Dashboard
+                    </a>
+                    <a href="dashboard.html" class="menu-item">
+                        <img src="assets/icons/calendar.svg" alt="Icon" width="18" height="18"> Timeline & Log
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-label">Others</div>
+                <div class="menu-list">
+                    <a href="aktivitas.html" class="menu-item">
+                        <img src="assets/icons/Aktivitas.svg" alt="Icon" width="18" height="18"> Aktivitas Harian
+                    </a>
+                    <a href="pesan.html" class="menu-item active">
+                        <img src="assets/icons/message.svg" alt="Icon" width="18" height="18"> Pesan & Komplain
+                    </a>
+                    <a href="setting.html" class="menu-item">
+                        <img src="assets/icons/Setting.svg" alt="Icon" width="18" height="18"> Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">ZA</div>
+                <div class="user-info">
+                    <span class="user-name">Achmad Zaenudin</span>
+                    <span class="user-role">Corporate Communications</span>
+                </div>
+            </div>
+            <a href="index.html" class="logout-btn">Keluar (Logout)</a>
+        </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="main-logo-container">
+                    <img src="assets/icons/SmartDash Panjang.svg" alt="Logo Smartdash">
+                    <p>Pesan dan komplain pelanggan terintegrasi.</p>    
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-card">
+            <div class="table-header-title">Daftar Pesan & Komplain Masuk</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="6%">No</th>
+                        <th width="10%">Waktu Masuk</th>
+                        <th width="10%">Platform / Tipe</th>
+                        <th width="10%">Nama / Akun</th>
+                        <th width="64%">Isi Pesan / Komplain</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Data akan dimuat secara dinamis via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Elemen Overlay untuk Mobile -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <style>
+    /* CSS Inline Darurat: Langsung hitam jika localStorage bernilai dark */
+        html.dark-mode, body.dark-mode {
+            background-color: #0f172a !important; /* Sesuaikan dengan warna background dark mode kamu */
+            color: #f1f5f9 !important;
+        }
+    </style>
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+        }
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Ambil Data dari Google Apps Script
+        document.addEventListener("DOMContentLoaded", function() {
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
+
+            fetch(WEB_APP_URL)
+                .then(response => {
+                    if (!response.ok) throw new Error('Gagal memuat data dari Spreadsheet');
+                    return response.json();
+                })
+                .then(data => {
+                    const tbody = document.getElementById('table-body');
+                    tbody.innerHTML = '';
+
+                    let rawKomentar = data.komentar || [];
+                    let rawDm = data.dm || [];
+                    let allData = [];
+
+                    if (rawKomentar.length > 1) {
+                        let headersKomentar = rawKomentar[0];
+                        for (let i = 1; i < rawKomentar.length; i++) {
+                            let rowObj = {};
+                            headersKomentar.forEach((header, index) => {
+                                rowObj[header] = rawKomentar[i][index];
+                            });
+                            if (!rowObj["Tipe"]) rowObj["Tipe"] = "Komentar";
+                            allData.push(rowObj);
+                        }
+                    }
+
+                    if (rawDm.length > 1) {
+                        let headersDm = rawDm[0];
+                        for (let i = 1; i < rawDm.length; i++) {
+                            let rowObj = {};
+                            headersDm.forEach((header, index) => {
+                                rowObj[header] = rawDm[i][index];
+                            });
+                            if (!rowObj["Tipe"]) rowObj["Tipe"] = "Direct Message";
+                            allData.push(rowObj);
+                        }
+                    }
+
+                    if (allData.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="5" class="empty-state">Tidak ada data sama sekali di spreadsheet.</td></tr>`;
+                        return;
+                    }
+
+                    tbody.innerHTML = "";
+                    allData.forEach((r, index) => {
+                        let tipe = r["Tipe"] || "Direct Message";
+                        let badgeClass = tipe.toLowerCase().includes("komentar") ? "badge-komentar" : "badge-dm";
+                        
+                        let rawWaktu = String(r["Waktu Masuk"] || r["Tanggal dan Waktu"] || r["Waktu"] || r["Tanggal"] || "");
+                        let waktuMasuk = rawWaktu;
+                        
+                        if (!rawWaktu || rawWaktu.includes("1899") || rawWaktu.includes("1899-12-30")) {
+                            waktuMasuk = r["Tanggal"] || "Terbaru";
+                        } else if (rawWaktu.length > 19) {
+                            waktuMasuk = rawWaktu.substring(0, 10) + " " + rawWaktu.substring(11, 19);
+                        }
+
+                        let namaPengirim = r["Pengirim"] || r["Nama"] || r["Nama / Akun"] || "-";
+                        let isiPesan = r["Isi Pesan"] || r["Pesan"] || "-";
+                        
+                        let tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${waktuMasuk}</td>
+                            <td><span class="badge-type ${badgeClass}">${tipe}</span></td>
+                            <td><b>${namaPengirim}</b></td>
+                            <td>${isiPesan}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('table-body').innerHTML = `<tr><td colspan="5" class="empty-state" style="color: #B43F3F;">Gagal memuat data dari Google Spreadsheet.</td></tr>`;
+                });
+        });
+
+        // Logika Toggle Sidebar, Tombol X, dan Overlay
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("sidebar-toggle");
+            const closeBtn = document.getElementById("sidebar-close");
+            const overlay = document.getElementById("sidebar-overlay");
+
+            function closeSidebar() {
+                document.body.classList.add("sidebar-collapsed");
+                localStorage.setItem('sidebar', 'collapsed');
+            }
+
+            function openSidebar() {
+                document.body.classList.remove("sidebar-collapsed");
+                localStorage.setItem('sidebar', 'expanded');
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function () {
+                    if (document.body.classList.contains("sidebar-collapsed")) {
+                        openSidebar();
+                    } else {
+                        closeSidebar();
+                    }
+                });
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", closeSidebar);
+            }
+        });
+    </script>
+</body>
+</html>

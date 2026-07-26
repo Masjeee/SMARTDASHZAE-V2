@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SMARTDASH Astra Infra</title>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        /* Background Gambar dengan Efek Overlay Gelap Profesional */
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(11, 28, 48, 0.7), rgba(15, 76, 129, 0.7)), 
+                        url('assets/icons/bg-login.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Container Kotak Login (Glassmorphism Style) */
+        .login-card {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(16px);
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 
+                0 0 40px rgba(15, 76, 129, 0.25); 
+                
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+        /* Header Logo & Judul */
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px; /* Ukuran besar judul */
+            font-weight: 800; /* Tingkat ketebalan font */
+            color: #F8EDED;
+            letter-spacing: 1px;
+}
+
+        .login-header p {
+            font-family: 'inter', sans-serif;
+            font-size: 14px; /* Ukuran font dibuat lebih kecil dan rapi */
+            font-weight: 300;
+            color: #F8EDED;
+            line-height: 1.4; /* Jarak antar baris supaya tidak terlalu rapat */
+            margin-top: 8px;
+        }
+
+        /* Form Input Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1e293b;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #0f4c81;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.15);
+        }
+
+        /* Tombol Masuk */
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            text-decoration: none; 
+            display: block; 
+            text-align: center;
+        }
+
+.login-btn:hover {
+    transform: translateY(-1px);
+    /* Efek glow oranye saat kursor diarahkan ke tombol */
+    box-shadow: 0 6px 15px rgba(249, 115, 22, 0.4);
+}
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(15, 76, 129, 0.35);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="login-header">
+            <!-- Kamu bisa ganti teks ini dengan logo atau gambar SVG logo Astra -->
+            <h2>SMARTDASH</h2>
+            <p>Dashboard Monitoring Otomatis Corporate Communication
+Astra Infra Toll Road Tangerang-Merak</p>
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="input-field" value="ZAE" placeholder="Masukkan username Anda" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="input-field" placeholder="Masukkan password Anda" required>
+            </div>
+
+            <a href="dashboard.html" class="login-btn" style="text-decoration: none; display: block; text-align: center;">Masuk Dashboard</a>
+        </form>
+
+        <div class="login-footer">
+            &copy; 2026 Astra Infra Toll Road Tangerang-Merak
+        </div>
+    </div>
+<script>
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+</script>
+</body>
+</html>
