@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <!-- FILTER TANGGAL DI DALAM SIDEBAR -->
+            <!-- FILTER TANGGAL DI SIDEBAR -->
             <div class="menu-section" style="margin-top: 10px;">
                 <div class="submenu-container open" style="max-height: none; padding-left: 0;">
                     <div class="filter-box">
@@ -45,7 +45,7 @@
                         <label style="margin-top: 6px;">SAMPAI TANGGAL</label>
                         <input type="date" id="filter-end">
 
-                        <button class="filter-btn" style="width: 100%; margin-top: 8px;">Terapkan Filter</button>
+                        <button id="btn-filter" class="filter-btn" style="width: 100%; margin-top: 8px;">Terapkan Filter</button>
                     </div>
                 </div>
             </div>
@@ -119,31 +119,79 @@
             background-color: #0f172a !important;
             color: #f1f5f9 !important;
         }
+        table th {
+            color: #475569 !important;
+            font-weight: 700 !important;
+        }
+        table td {
+            color: #1e293b !important;
+            font-weight: 500 !important;
+        }
+        body.dark-mode table th {
+            color: #94a3b8 !important;
+        }
+        body.dark-mode table td {
+            color: #f1f5f9 !important;
+        }
     </style>
 
     <script>
-        // Cek dan terapkan Tema Dark Mode
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
             document.body.classList.add('dark-mode');
         }
 
-        // Ambil Data dari Google Apps Script
         document.addEventListener("DOMContentLoaded", function() {
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
+            let globalData = [];
 
+            function renderTable(dataArray) {
+                const tbody = document.getElementById('table-body');
+                tbody.innerHTML = '';
+
+                if (dataArray.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="empty-state" style="text-align: center; padding: 20px;">Tidak ada data pada rentang tanggal tersebut.</td></tr>`;
+                    return;
+                }
+
+                dataArray.forEach((r, index) => {
+                    let tipe = r["Tipe"] || "Direct Message";
+                    let badgeClass = tipe.toLowerCase().includes("komentar") ? "badge-komentar" : "badge-dm";
+                    
+                    let rawWaktu = String(r["Waktu Masuk"] || r["Tanggal dan Waktu"] || r["Waktu"] || r["Tanggal"] || "");
+                    let waktuMasuk = rawWaktu;
+                    
+                    if (!rawWaktu || rawWaktu.includes("1899") || rawWaktu.includes("1899-12-30")) {
+                        waktuMasuk = r["Tanggal"] || "Terbaru";
+                    } else if (rawWaktu.length > 19) {
+                        waktuMasuk = rawWaktu.substring(0, 10) + " " + rawWaktu.substring(11, 19);
+                    }
+
+                    let namaPengirim = r["Pengirim"] || r["Nama"] || r["Nama / Akun"] || "-";
+                    let isiPesan = r["Isi Pesan"] || r["Pesan"] || "-";
+                    
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${waktuMasuk}</td>
+                        <td><span class="badge-type ${badgeClass}">${tipe}</span></td>
+                        <td><b>${namaPengirim}</b></td>
+                        <td>${isiPesan}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Ambil Data dari Google Apps Script
             fetch(WEB_APP_URL)
                 .then(response => {
                     if (!response.ok) throw new Error('Gagal memuat data dari Spreadsheet');
                     return response.json();
                 })
                 .then(data => {
-                    const tbody = document.getElementById('table-body');
-                    tbody.innerHTML = '';
-
                     let rawKomentar = data.komentar || [];
                     let rawDm = data.dm || [];
-                    let allData = [];
+                    globalData = [];
 
                     if (rawKomentar.length > 1) {
                         let headersKomentar = rawKomentar[0];
@@ -153,7 +201,7 @@
                                 rowObj[header] = rawKomentar[i][index];
                             });
                             if (!rowObj["Tipe"]) rowObj["Tipe"] = "Komentar";
-                            allData.push(rowObj);
+                            globalData.push(rowObj);
                         }
                     }
 
@@ -165,50 +213,40 @@
                                 rowObj[header] = rawDm[i][index];
                             });
                             if (!rowObj["Tipe"]) rowObj["Tipe"] = "Direct Message";
-                            allData.push(rowObj);
+                            globalData.push(rowObj);
                         }
                     }
 
-                    if (allData.length === 0) {
-                        tbody.innerHTML = `<tr><td colspan="5" class="empty-state" style="text-align: center; padding: 20px;">Tidak ada data sama sekali di spreadsheet.</td></tr>`;
-                        return;
-                    }
-
-                    allData.forEach((r, index) => {
-                        let tipe = r["Tipe"] || "Direct Message";
-                        let badgeClass = tipe.toLowerCase().includes("komentar") ? "badge-komentar" : "badge-dm";
-                        
-                        let rawWaktu = String(r["Waktu Masuk"] || r["Tanggal dan Waktu"] || r["Waktu"] || r["Tanggal"] || "");
-                        let waktuMasuk = rawWaktu;
-                        
-                        if (!rawWaktu || rawWaktu.includes("1899") || rawWaktu.includes("1899-12-30")) {
-                            waktuMasuk = r["Tanggal"] || "Terbaru";
-                        } else if (rawWaktu.length > 19) {
-                            waktuMasuk = rawWaktu.substring(0, 10) + " " + rawWaktu.substring(11, 19);
-                        }
-
-                        let namaPengirim = r["Pengirim"] || r["Nama"] || r["Nama / Akun"] || "-";
-                        let isiPesan = r["Isi Pesan"] || r["Pesan"] || "-";
-                        
-                        let tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${index + 1}</td>
-                            <td>${waktuMasuk}</td>
-                            <td><span class="badge-type ${badgeClass}">${tipe}</span></td>
-                            <td><b>${namaPengirim}</b></td>
-                            <td>${isiPesan}</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+                    renderTable(globalData);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     document.getElementById('table-body').innerHTML = `<tr><td colspan="5" class="empty-state" style="color: #B43F3F; text-align: center; padding: 20px;">Gagal memuat data dari Google Spreadsheet.</td></tr>`;
                 });
-        });
 
-        // Logika Toggle Sidebar, Tombol X, dan Overlay
-        document.addEventListener("DOMContentLoaded", function () {
+            // Logika Tombol Terapkan Filter
+            const btnFilter = document.getElementById("btn-filter");
+            if (btnFilter) {
+                btnFilter.addEventListener("click", function() {
+                    const startDate = document.getElementById("filter-start").value;
+                    const endDate = document.getElementById("filter-end").value;
+
+                    if (!startDate || !endDate) {
+                        alert("Silakan pilih tanggal 'Dari' dan 'Sampai' terlebih dahulu!");
+                        return;
+                    }
+
+                    const filtered = globalData.filter(item => {
+                        let rawWaktu = String(item["Waktu Masuk"] || item["Tanggal dan Waktu"] || item["Waktu"] || item["Tanggal"] || "");
+                        let itemDate = rawWaktu.substring(0, 10); // Format YYYY-MM-DD
+                        return itemDate >= startDate && itemDate <= endDate;
+                    });
+
+                    renderTable(filtered);
+                });
+            }
+
+            // Logika Toggle Sidebar, Tombol X, dan Overlay
             const toggleBtn = document.getElementById("sidebar-toggle");
             const closeBtn = document.getElementById("sidebar-close");
             const overlay = document.getElementById("sidebar-overlay");

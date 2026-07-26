@@ -12,10 +12,10 @@
     
     <style>
         html.dark-mode, body.dark-mode {
-            background-color: #0f172a !important; /* Sesuaikan dengan warna background dark mode kamu */
+            background-color: #0f172a !important;
             color: #f1f5f9 !important;
         }
-        /* Styling Tombol Sidebar & Logo Header */
+
         .sidebar-toggle-btn {
             background: none;
             border: none;
@@ -61,7 +61,6 @@
             font-weight: 400;
         }
             
-        /* Styling Section Instagram Feed */
         .ig-section-title {
             font-size: 16px;
             font-weight: 700;
@@ -129,7 +128,6 @@
             text-decoration: underline;
         }
         
-        /* Responsif untuk Layar HP */
         @media (max-width: 768px) {
             .ig-grid {
                 grid-template-columns: 1fr;
@@ -232,6 +230,20 @@
                 <div class="value" id="val-struk">0</div>
             </div>
         </div>
+       
+        <div class="section-title">Sumber Masuk Pesan</div>
+        <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 20px;">
+            <div class="stat-card">
+                <h3>TOTAL DIRECT MESSAGE (DM)</h3>
+                <div class="value" id="total-dm">0</div>
+                <div class="note">Pesan pribadi masuk</div>
+            </div>
+            <div class="stat-card">
+                <h3>TOTAL KOMENTAR</h3>
+                <div class="value" id="total-komentar">0</div>
+                <div class="note">Komentar publik masuk</div>
+            </div>
+        </div>
 
         <div class="section-title">Analisis Sentimen</div>
         <div class="stats-grid">
@@ -314,9 +326,6 @@
 
     <!-- Skrip Internal Utama -->
     <script>
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark-mode');
-        }
         // Cek Preferensi Tema & Sidebar dari LocalStorage (Anti-Glitch)
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
@@ -328,7 +337,7 @@
             document.body.classList.add('sidebar-collapsed');
         }
 
-        // Logika Toggle Sidebar, Tombol X, dan Overlay
+        // Logika Toggle Sidebar, Tombol X, Overlay, dan Feed Instagram
         document.addEventListener("DOMContentLoaded", function () {
             const toggleBtn = document.getElementById("sidebar-toggle");
             const closeBtn = document.getElementById("sidebar-close");
@@ -362,12 +371,14 @@
                 overlay.addEventListener("click", closeSidebar);
             }
 
-            // Fetch Feed Instagram Terbaru
-            fetch('https://masjeee.pythonanywhere.com/api/ig-latest')
-                .then(response => response.json())
+            // Fetch Feed Instagram Terbaru dengan Penanganan Error CORS yang Aman
+            fetch('https://masjeee.pythonanywhere.com/api/ig-latest', { mode: 'cors' })
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
                 .then(data => {
                     const igCards = document.querySelectorAll('.ig-card');
-                    
                     data.forEach((post, index) => {
                         if (igCards[index]) {
                             const img = igCards[index].querySelector('.ig-thumbnail');
@@ -380,7 +391,71 @@
                         }
                     });
                 })
-                .catch(error => console.error('Gagal memuat feed Instagram:', error));
+                .catch(error => {
+                    console.warn('Catatan: Feed Instagram dibatasi oleh kebijakan CORS di server lokal:', error);
+                });
+
+            // Fungsi untuk Mengambil dan Memfilter Total DM & Komentar Berdasarkan Tanggal
+            function updateMessageTotals(startDate = "", endDate = "") {
+                const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
+                
+                fetch(WEB_APP_URL)
+                    .then(response => response.json())
+                    .then(data => {
+                        let dmKey = Object.keys(data).find(k => k.toUpperCase().includes("MENTAH") || k.toUpperCase().includes("DM")) || "dm";
+                        let komKey = Object.keys(data).find(k => k.toUpperCase().includes("KOMENTAR")) || "komentar";
+
+                        let dmList = data[dmKey] || [];
+                        let komList = data[komKey] || [];
+
+                        if (startDate && endDate) {
+                            dmList = dmList.filter((row, index) => {
+                                if (index === 0) return false;
+                                let rowString = row.join(" ");
+                                let matchDate = rowString.match(/\d{4}-\d{2}-\d{2}/);
+                                if (matchDate) {
+                                    let d = matchDate[0];
+                                    return d >= startDate && d <= endDate;
+                                }
+                                return false;
+                            });
+
+                            komList = komList.filter((row, index) => {
+                                if (index === 0) return false;
+                                let rowString = row.join(" ");
+                                let matchDate = rowString.match(/\d{4}-\d{2}-\d{2}/);
+                                if (matchDate) {
+                                    let d = matchDate[0];
+                                    return d >= startDate && d <= endDate;
+                                }
+                                return false;
+                            });
+
+                            document.getElementById('total-dm').innerText = dmList.length;
+                            document.getElementById('total-komentar').innerText = komList.length;
+                        } else {
+                            let totalDmCount = dmList.length > 1 ? dmList.length - 1 : 0;
+                            let totalKomentarCount = komList.length > 1 ? komList.length - 1 : 0;
+
+                            document.getElementById('total-dm').innerText = totalDmCount;
+                            document.getElementById('total-komentar').innerText = totalKomentarCount;
+                        }
+                    })
+                    .catch(err => console.error('Gagal mengambil total pesan:', err));
+            }
+
+            // Panggil saat pertama kali dimuat
+            updateMessageTotals();
+
+            // Hubungkan ke tombol "Terapkan Filter" di sidebar
+            const applyFilterBtn = document.getElementById('applyFilterBtn');
+            if (applyFilterBtn) {
+                applyFilterBtn.addEventListener('click', function() {
+                    const sDate = document.getElementById('startDate').value;
+                    const eDate = document.getElementById('endDate').value;
+                    updateMessageTotals(sDate, eDate);
+                });
+            }
         });
     </script>
 </body>
