@@ -11,41 +11,106 @@
     
     
     <style>
-        html.dark-mode, body.dark-mode {
-            background-color: #0f172a !important; /* Sesuaikan dengan warna background dark mode kamu */
-            color: #f1f5f9 !important;
+        .submenu-container {
+            max-height: 0 !important;
+            overflow: hidden !important;
+            transition: max-height 0.3s ease-out !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
-        .top-bar {
-        display: flex !important;
-        align-items: flex-start !important; /* Diubah dari center agar sejajar ke atas */
-        justify-content: space-between !important;
-        flex-wrap: wrap !important; /* Mengizinkan elemen turun ke bawah di layar kecil */
-        gap: 15px !important;
-        margin-bottom: 24px !important;
+        .submenu-container.open {
+            max-height: 250px !important;
         }
-        .top-bar-left {
-            display: flex !important;
-            align-items: flex-start !important;
-            gap: 12px !important;
-            flex: 1 !important;
-            min-width: 0 !important;
+
+        .submenu-container .filter-box {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            padding: 12px !important;
+            border-radius: 8px !important;
+            margin-top: 6px !important;
+            margin-bottom: 6px !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+            box-sizing: border-box !important;
         }
-        .main-logo-container {
-            display: flex;
-            flex-direction: column;
-        }
-        .main-logo-container img {
-            max-width: 160px !important;
-            height: auto !important;
+
+        .submenu-container .filter-box label {
             display: block !important;
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 9px !important;
+            font-weight: 700 !important;
+            color: #173B45 !important;
+            margin-bottom: 3px !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
         }
-        .main-logo-container p {
-            font-size: 12px !important;
-            color: #64748b !important;
-            margin-top: 4px !important;
-            white-space: normal !important; /* Membolehkan teks turun ke bawah */
-            word-break: break-word !important;
+
+        .submenu-container .filter-box input[type="date"] {
+            width: 100% !important;
+            height: 32px !important;
+            padding: 4px 8px !important;
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 11px !important;
+            color: #334155 !important;
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            margin-bottom: 8px !important;
+            box-sizing: border-box !important;
+            outline: none !important;
         }
+
+        .submenu-container .filter-box input[type="date"]:focus {
+            border-color: #FF8225 !important;
+        }
+
+        .submenu-container .filter-btn {
+            width: 100% !important;
+            background-color: #FF8225 !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 6px !important;
+            border-radius: 6px !important;
+            font-family: 'Epilogue', sans-serif !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+            cursor: pointer !important;
+            box-sizing: border-box !important;
+            transition: background 0.2s !important;
+        }
+
+        .submenu-container .filter-btn:hover {
+            background-color: #e06d1c !important;
+        }
+
+        /* Sembunyikan tombol close (X) di sidebar desktop */
+        .sidebar-close-btn {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-close-btn {
+                display: block !important;
+            }
+        }
+
+        .top-bar {
+            position: sticky !important;
+            top: 0 !important;
+            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            z-index: 100 !important;
+            padding-top: 20px !important;
+            padding-bottom: 15px !important;
+            margin-bottom: 20px !important;
+            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+        }
+
+        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
+        html.dark-mode .top-bar, body.dark-mode .top-bar {
+            background-color: #0f172a !important;
+            border-bottom: 1px solid #1e293b !important;
+        }
+        
     </style>
 </head>
 <body>
@@ -112,8 +177,8 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="main-logo-container">
-                    <img src="assets/icons/SmartDash Panjang.svg" alt="Logo Smartdash">
-                    <p>Kelola preferensi tampilan dan konfigurasi antarmuka dashboard.</p>    
+                    <img src="assets/icons/SmartDash Panjang.svg" alt="Smart Dash Logo">
+                    <p>System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>
                 </div>
             </div>
         </div>

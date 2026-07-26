@@ -8,15 +8,119 @@
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .submenu-container {
+            max-height: 0 !important;
+            overflow: hidden !important;
+            transition: max-height 0.3s ease-out !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        .submenu-container.open {
+            max-height: 250px !important;
+        }
+
+        .submenu-container .filter-box {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            padding: 12px !important;
+            border-radius: 8px !important;
+            margin-top: 6px !important;
+            margin-bottom: 6px !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+            box-sizing: border-box !important;
+        }
+
+        .submenu-container .filter-box label {
+            display: block !important;
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 9px !important;
+            font-weight: 700 !important;
+            color: #173B45 !important;
+            margin-bottom: 3px !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
+        }
+
+        .submenu-container .filter-box input[type="date"] {
+            width: 100% !important;
+            height: 32px !important;
+            padding: 4px 8px !important;
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 11px !important;
+            color: #334155 !important;
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            margin-bottom: 8px !important;
+            box-sizing: border-box !important;
+            outline: none !important;
+        }
+
+        .submenu-container .filter-box input[type="date"]:focus {
+            border-color: #FF8225 !important;
+        }
+
+        .submenu-container .filter-btn {
+            width: 100% !important;
+            background-color: #FF8225 !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 6px !important;
+            border-radius: 6px !important;
+            font-family: 'Epilogue', sans-serif !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+            cursor: pointer !important;
+            box-sizing: border-box !important;
+            transition: background 0.2s !important;
+        }
+
+        .submenu-container .filter-btn:hover {
+            background-color: #e06d1c !important;
+        }
+
+        /* Sembunyikan tombol close (X) di sidebar desktop */
+        .sidebar-close-btn {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-close-btn {
+                display: block !important;
+            }
+        }
+
+        .top-bar {
+            position: sticky !important;
+            top: 0 !important;
+            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            z-index: 100 !important;
+            padding-top: 20px !important;
+            padding-bottom: 15px !important;
+            margin-bottom: 20px !important;
+            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+        }
+
+        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
+        html.dark-mode .top-bar, body.dark-mode .top-bar {
+            background-color: #0f172a !important;
+            border-bottom: 1px solid #1e293b !important;
+        }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/script.js"></script> 
 </head>
 
 <body>
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-top">
-            <div class="sidebar-header-mobile" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px;">
+            <div class="sidebar-header-mobile" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px; padding: 0 10px;">
                 <div class="brand-logo-container">
-                    <img src="assets/icons/Logo.svg" alt="Logo Smartdash" class="brand-logo">
+                    <img src="assets/icons/Logo.svg" alt="Logo Smartdash" class="brand-logo" style="height: 35px;">
                 </div>
                 <button id="sidebar-close" class="sidebar-close-btn" aria-label="Tutup Menu" style="display: none; background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; padding: 4px 8px;">
                     <i class="fa-solid fa-xmark"></i>
@@ -38,7 +142,7 @@
             <div class="menu-section">
                 <div class="menu-label">Others</div>
                 <div class="menu-list">
-                    <a href="aktivitas.html" class="menu-item">
+                    <a href="aktivitas.html" class="menu-item active">
                         <img src="assets/icons/Aktivitas.svg" alt="Icon" class="menu-icon"> Aktivitas Harian
                     </a>
                     <a href="pesan.html" class="menu-item">
@@ -74,10 +178,11 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="main-logo-container">
-                    <img src="assets/icons/SmartDash Panjang.svg" alt="Logo Smartdash">
-                    <p>Live aktivitas interaksi, Direct Message (DM), dan komentar 3 hari terakhir.</p>    
+                    <img src="assets/icons/SmartDash Panjang.svg" alt="Smart Dash Logo">
+                    <p>System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>
                 </div>
             </div>
+        </div>
         
         <div class="table-card">
             <div class="table-header-title">Aktivitas Terkini (3 Hari Terakhir)</div>
@@ -101,34 +206,11 @@
     <!-- Elemen Overlay untuk Mobile -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <style>
-    /* CSS Inline Darurat: Langsung hitam jika localStorage bernilai dark */
-    html.dark-mode, body.dark-mode {
-        background-color: #0f172a !important; /* Sesuaikan dengan warna background dark mode kamu */
-        color: #f1f5f9 !important;
-    }
-</style>
-
     <script>
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
-        }
-        if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
-
-        // Update Jam Realtime di Header
-        function updateClock() {
-            const now = new Date();
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            let timeString = now.toLocaleDateString('id-ID', options).replace(/\./g, '/');
-            const timeElement = document.getElementById('current-time');
-            if (timeElement) {
-                timeElement.innerText = timeString + " WIB";
-            }
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
 
         // Ambil Data dari Google Apps Script dan Filter 3 Hari Terakhir
         document.addEventListener("DOMContentLoaded", function() {

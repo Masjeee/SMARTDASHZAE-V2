@@ -15,22 +15,26 @@
             max-height: 0 !important;
             overflow: hidden !important;
             transition: max-height 0.3s ease-out !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
         .submenu-container.open {
             max-height: 250px !important;
         }
 
-        .filter-box {
+        .submenu-container .filter-box {
             background-color: #ffffff !important;
             border: 1px solid #e2e8f0 !important;
-            padding: 10px !important;
+            padding: 12px !important;
             border-radius: 8px !important;
             margin-top: 6px !important;
             margin-bottom: 6px !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
             box-sizing: border-box !important;
         }
 
-        .filter-box label {
+        .submenu-container .filter-box label {
             display: block !important;
             font-family: 'Epilogue', sans-serif !important;
             font-size: 9px !important;
@@ -41,7 +45,7 @@
             text-transform: uppercase !important;
         }
 
-        .filter-box input[type="date"] {
+        .submenu-container .filter-box input[type="date"] {
             width: 100% !important;
             height: 32px !important;
             padding: 4px 8px !important;
@@ -56,11 +60,11 @@
             outline: none !important;
         }
 
-        .filter-box input[type="date"]:focus {
+        .submenu-container .filter-box input[type="date"]:focus {
             border-color: #FF8225 !important;
         }
 
-        .filter-btn {
+        .submenu-container .filter-btn {
             width: 100% !important;
             background-color: #FF8225 !important;
             color: #ffffff !important;
@@ -75,7 +79,7 @@
             transition: background 0.2s !important;
         }
 
-        .filter-btn:hover {
+        .submenu-container .filter-btn:hover {
             background-color: #e06d1c !important;
         }
 
@@ -89,6 +93,24 @@
                 display: block !important;
             }
         }
+
+        .top-bar {
+            position: sticky !important;
+            top: 0 !important;
+            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            z-index: 100 !important;
+            padding-top: 20px !important;
+            padding-bottom: 15px !important;
+            margin-bottom: 20px !important;
+            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+        }
+
+        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
+        html.dark-mode .top-bar, body.dark-mode .top-bar {
+            background-color: #0f172a !important;
+            border-bottom: 1px solid #1e293b !important;
+        }
+
     </style>
 </head>
 <body>
@@ -168,8 +190,8 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="main-logo-container">
-                    <img src="assets/icons/SmartDash Panjang.svg" alt="Logo Smartdash">
-                    <p>System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>    
+                    <img src="assets/icons/SmartDash Panjang.svg" alt="Smart Dash Logo">
+                    <p>System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>
                 </div>
             </div>
         </div>

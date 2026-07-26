@@ -92,6 +92,67 @@
                 display: block !important;
             }
         }
+
+        .top-bar {
+            position: sticky !important;
+            top: 0 !important;
+            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            z-index: 100 !important;
+            padding-top: 20px !important;
+            padding-bottom: 15px !important;
+            margin-bottom: 20px !important;
+            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+        }
+
+        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
+        html.dark-mode .top-bar, body.dark-mode .top-bar {
+            background-color: #0f172a !important;
+            border-bottom: 1px solid #1e293b !important;
+        }
+
+        .section-title {
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        color: #173B45 !important;
+        margin: 30px 0 15px 0 !important;
+    }
+
+        /* Standarisasi Kartu Statistik / Ringkasan */
+        .stat-card {
+            background: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        .stat-card h3 {
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            color: #64748b !important;
+            margin-bottom: 8px !important;
+        }
+
+        .stat-card .value {
+            font-size: 24px !important;
+            font-weight: 700 !important;
+            color: #173B45 !important;
+        }
+
+        /* Standarisasi Tabel */
+        table th {
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #173B45 !important;
+            padding: 10px !important;
+        }
+
+        table td {
+            font-size: 13px !important;
+            color: #334155 !important;
+            padding: 10px !important;
+        }
+
     </style>
 </head>
 <body>
@@ -289,69 +350,68 @@
 
             initChartsPesan();
 
-            // Fetch Data DM
-            fetch(WEB_APP_URL)
-                .then(res => res.json())
-                .then(data => {
-                    let dmList = data.dm || [];
-                    if (dmList.length > 1) {
-                        let headers = dmList[0];
-                        globalPesanRows = [];
-                        for (let i = 1; i < dmList.length; i++) {
-                            let obj = {};
-                            headers.forEach((h, idx) => { obj[h] = dmList[i][idx]; });
-                            globalPesanRows.push(obj);
-                        }
+                fetch(WEB_APP_URL)
+                    .then(res => res.json())
+                    .then(data => {
+                        let dmList = data.dm || [];
+                        if (dmList.length > 1) {
+                            let headers = dmList[0];
+                            globalPesanRows = [];
+                            for (let i = 1; i < dmList.length; i++) {
+                                let obj = {};
+                                headers.forEach((h, idx) => { obj[h] = dmList[i][idx]; });
+                                globalPesanRows.push(obj);
+                            }
 
-                        let dates = globalPesanRows.map(r => r.Tanggal).filter(Boolean).sort();
-                        if (dates.length > 0) {
-                            document.getElementById('startDate').value = dates[0].substring(0, 10);
-                            document.getElementById('endDate').value = dates[dates.length - 1].substring(0, 10);
-                            prosesFilterDanUpdate();
+                            let dates = globalPesanRows.map(r => r.Tanggal).filter(Boolean).sort();
+                            if (dates.length > 0) {
+                                // document.getElementById('startDate').value = dates[0].substring(0, 10);
+                                // document.getElementById('endDate').value = dates[dates.length - 1].substring(0, 10);
+                                // prosesFilterDanUpdate();
+                            }
                         }
-                    }
-                })
-                .catch(err => console.error("Gagal memuat data pesan:", err));
-        });
-
-        function initChartsPesan() {
-            const ctxLine = document.getElementById('lineChartPesan').getContext('2d');
-            lineChartInst = new Chart(ctxLine, {
-                type: 'line',
-                data: { 
-                    labels: [], 
-                    datasets: [{ 
-                        label: 'Total Pesan', 
-                        data: [], 
-                        borderColor: '#FF8225',          
-                        backgroundColor: 'rgba(255, 130, 37, 0.1)',
-                        borderWidth: 2.5,                        
-                        fill: true,                              
-                        tension: 0.4,                            
-                        pointRadius: 2,                          
-                        pointHoverRadius: 6                     
-                    }] 
-                },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
-                    scales: { 
-                        x: { 
-                            grid: { display: false }, 
-                            ticks: { 
-                                maxTicksLimit: 8, 
-                                maxRotation: 30, 
-                                font: { size: 10 } 
-                            } 
-                        }, 
-                        y: { 
-                            grid: { color: '#f1f5f9' }, 
-                            ticks: { font: { size: 10 } } 
-                        } 
-                    } 
-                }
+                    })
+                    .catch(err => console.error("Gagal memuat data pesan:", err));
             });
+
+            function initChartsPesan() {
+                const ctxLine = document.getElementById('lineChartPesan').getContext('2d');
+                lineChartInst = new Chart(ctxLine, {
+                    type: 'line',
+                    data: { 
+                        labels: [], 
+                        datasets: [{ 
+                            label: 'Total Pesan', 
+                            data: [], 
+                            borderColor: '#FF8225',          
+                            backgroundColor: 'rgba(255, 130, 37, 0.1)',
+                            borderWidth: 2.5,                        
+                            fill: true,                              
+                            tension: 0.4,                            
+                            pointRadius: 0,          // Diubah dari 2 menjadi 0 agar mulus tanpa titik
+                            pointHoverRadius: 6                     
+                        }] 
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { legend: { display: false } }, 
+                        scales: { 
+                            x: { 
+                                grid: { display: false }, 
+                                ticks: { 
+                                    maxTicksLimit: 8, 
+                                    maxRotation: 30, 
+                                    font: { size: 10 } 
+                                } 
+                            }, 
+                            y: { 
+                                grid: { color: '#f1f5f9' }, 
+                                ticks: { font: { size: 10 } } 
+                            } 
+                        } 
+                    }
+                });
 
             const ctxCategory = document.getElementById('donutCategoryPesan').getContext('2d');
             categoryChartInst = new Chart(ctxCategory, {
