@@ -83,7 +83,6 @@
             background-color: #e06d1c !important;
         }
 
-        /* Sembunyikan tombol close (X) di sidebar desktop */
         .sidebar-close-btn {
             display: none !important;
         }
@@ -97,20 +96,18 @@
         .top-bar {
             position: sticky !important;
             top: 0 !important;
-            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            background-color: #f8fafc !important;
             z-index: 100 !important;
             padding-top: 20px !important;
             padding-bottom: 15px !important;
             margin-bottom: 20px !important;
-            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
         html.dark-mode .top-bar, body.dark-mode .top-bar {
             background-color: #0f172a !important;
             border-bottom: 1px solid #1e293b !important;
         }
-
     </style>
 </head>
 <body>
@@ -134,6 +131,9 @@
                     </a>
                     <a href="#" class="menu-item" id="toggleTimeline">
                         <img src="assets/icons/calendar.svg" alt="Timeline" class="menu-icon"> Timeline & Log
+                    </a>
+                    <a href="performance.html" class="menu-item">
+                        <img src="assets/icons/Dashboard.svg" alt="Performance Konten" class="menu-icon"> Performance Konten
                     </a>
                     <!-- Submenu Filter Tanggal -->
                     <div class="submenu-container" id="timelineSubmenu">
@@ -267,34 +267,25 @@
             </div>
         </div>
 
-        <!-- SECTION: FEED INSTAGRAM TERBARU -->
-        <div class="ig-section-title">
-            <i class="fab fa-instagram" style="color: #E1306C; font-size: 18px;"></i> 3 Konten Terbaru Instagram @astratoltamer
+        <!-- SECTION: 3 KONTEN TERBARU PERFORMANCE (Bentuk Card Rapi) -->
+        <div class="section-title" style="margin-top: 35px;">
+            <i class="fab fa-instagram" style="color: #E1306C; font-size: 18px; margin-right: 6px;"></i> 3 Konten Terbaru Instagram @astratoltamer
         </div>
-        <div class="ig-grid">
-            <!-- Konten 1 -->
-            <div class="ig-card">
-                <img src="assets/images/ig-sample-1.jpg" alt="Instagram Post 1" class="ig-thumbnail">
-                <div class="ig-content">
-                    <p class="ig-caption">Memuat konten terbaru...</p>
-                    <a href="https://www.instagram.com/astratoltamer" target="_blank" class="ig-link">Lihat di Instagram <i class="fas fa-external-link-alt"></i></a>
-                </div>
+        <div class="stats-grid" id="latest-content-container" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 30px;">
+            <div class="stat-card">
+                <h3>KONTEN TERBARU #1</h3>
+                <div class="value ig-caption" style="font-size: 14px; font-weight: 700; color: #173B45; margin: 8px 0;">Memuat konten...</div>
+                <a href="#" target="_blank" class="ig-link" style="font-size: 12px; color: #FF8225; text-decoration: none; font-weight: 600;">Lihat di Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></a>
             </div>
-            <!-- Konten 2 -->
-            <div class="ig-card">
-                <img src="assets/images/ig-sample-2.jpg" alt="Instagram Post 2" class="ig-thumbnail">
-                <div class="ig-content">
-                    <p class="ig-caption">Memuat konten terbaru...</p>
-                    <a href="https://www.instagram.com/astratoltamer" target="_blank" class="ig-link">Lihat di Instagram <i class="fas fa-external-link-alt"></i></a>
-                </div>
+            <div class="stat-card">
+                <h3>KONTEN TERBARU #2</h3>
+                <div class="value ig-caption" style="font-size: 14px; font-weight: 700; color: #173B45; margin: 8px 0;">Memuat konten...</div>
+                <a href="#" target="_blank" class="ig-link" style="font-size: 12px; color: #FF8225; text-decoration: none; font-weight: 600;">Lihat di Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></a>
             </div>
-            <!-- Konten 3 -->
-            <div class="ig-card">
-                <img src="assets/images/ig-sample-3.jpg" alt="Instagram Post 3" class="ig-thumbnail">
-                <div class="ig-content">
-                    <p class="ig-caption">Memuat konten terbaru...</p>
-                    <a href="https://www.instagram.com/astratoltamer" target="_blank" class="ig-link">Lihat di Instagram <i class="fas fa-external-link-alt"></i></a>
-                </div>
+            <div class="stat-card">
+                <h3>KONTEN TERBARU #3</h3>
+                <div class="value ig-caption" style="font-size: 14px; font-weight: 700; color: #173B45; margin: 8px 0;">Memuat konten...</div>
+                <a href="#" target="_blank" class="ig-link" style="font-size: 12px; color: #FF8225; text-decoration: none; font-weight: 600;">Lihat di Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></a>
             </div>
         </div>
     </main>
@@ -376,59 +367,9 @@
                     console.warn('Catatan: Feed Instagram dibatasi oleh kebijakan CORS di server lokal:', error);
                 });
 
-            // Fungsi untuk Mengambil dan Memfilter Total DM & Komentar Berdasarkan Tanggal
-            function updateMessageTotals(startDate = "", endDate = "") {
-                const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
-                
-                fetch(WEB_APP_URL)
-                    .then(response => response.json())
-                    .then(data => {
-                        let dmKey = Object.keys(data).find(k => k.toUpperCase().includes("MENTAH") || k.toUpperCase().includes("DM")) || "dm";
-                        let komKey = Object.keys(data).find(k => k.toUpperCase().includes("KOMENTAR")) || "komentar";
-
-                        let dmList = data[dmKey] || [];
-                        let komList = data[komKey] || [];
-
-                        if (startDate && endDate) {
-                            dmList = dmList.filter((row, index) => {
-                                if (index === 0) return false;
-                                let rowString = row.join(" ");
-                                let matchDate = rowString.match(/\d{4}-\d{2}-\d{2}/);
-                                if (matchDate) {
-                                    let d = matchDate[0];
-                                    return d >= startDate && d <= endDate;
-                                }
-                                return false;
-                            });
-
-                            komList = komList.filter((row, index) => {
-                                if (index === 0) return false;
-                                let rowString = row.join(" ");
-                                let matchDate = rowString.match(/\d{4}-\d{2}-\d{2}/);
-                                if (matchDate) {
-                                    let d = matchDate[0];
-                                    return d >= startDate && d <= endDate;
-                                }
-                                return false;
-                            });
-
-                            document.getElementById('total-dm').innerText = dmList.length;
-                            document.getElementById('total-komentar').innerText = komList.length;
-                        } else {
-                            let totalDmCount = dmList.length > 1 ? dmList.length - 1 : 0;
-                            let totalKomentarCount = komList.length > 1 ? komList.length - 1 : 0;
-
-                            document.getElementById('total-dm').innerText = totalDmCount;
-                            document.getElementById('total-komentar').innerText = totalKomentarCount;
-                        }
-                    })
-                    .catch(err => console.error('Gagal mengambil total pesan:', err));
-            }
-
-            // Panggil saat pertama kali dimuat
+            // Muat data pesan dan performance dari Apps Script
             updateMessageTotals();
 
-            // Hubungkan ke tombol "Terapkan Filter" di sidebar
             const applyFilterBtn = document.getElementById('applyFilterBtn');
             if (applyFilterBtn) {
                 applyFilterBtn.addEventListener('click', function() {
@@ -438,6 +379,66 @@
                 });
             }
         });
+
+            const PERFORMANCE_WEB_URL = "https://script.google.com/macros/s/AKfycbzAEc4YWC5ztkdB1PBfiABHZUYB4BF8vExCA8jWel2YIaWZJgNzSG_6VPpccoC_6Hri/exec";
+
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch(PERFORMANCE_WEB_URL)
+                    .then(response => response.json())
+                    .then(data => {
+                        let perfList = data.performance || [];
+                        if (perfList.length > 1) {
+                            let headers = perfList[0];
+                            let rows = [];
+                            for (let i = 1; i < perfList.length; i++) {
+                                let obj = {};
+                                headers.forEach((h, idx) => { obj[h] = perfList[i][idx]; });
+                                rows.push(obj);
+                            }
+                            let latestThree = rows.slice(-3).reverse();
+                            
+                            let cards = document.querySelectorAll('#latest-content-container .stat-card');
+                            latestThree.forEach((item, index) => {
+                                if (cards[index]) {
+                                    let caption = cards[index].querySelector('.ig-caption');
+                                    let link = cards[index].querySelector('.ig-link');
+                                    
+                                    let title = item["ID_Konten"] || `Konten Instagram ${index + 1}`;
+                                    let url = item["URL_Konten"] || "https://www.instagram.com/astratoltamer";
+
+                                    if (caption) caption.innerText = title;
+                                    if (link) link.href = url;
+                                }
+                            });
+                        }
+                    })
+                    .catch(err => console.error('Gagal memuat konten performance:', err));
+            });
+
+        function renderLatestContent(items) {
+            let container = document.getElementById('latest-content-container');
+            if (!container) return;
+
+            let html = '';
+            items.forEach((item, index) => {
+                let title = item["ID_Konten"] || `Konten Instagram ${index + 1}`;
+                let url = item["URL_Konten"] || "#";
+                
+                html += `
+                    <div class="ig-card">
+                        <div class="ig-content" style="padding: 15px;">
+                            <p class="ig-caption" style="font-weight: 600; font-size: 13px; color: #173B45; margin-bottom: 8px;">
+                                <i class="fa-brands fa-instagram" style="color: #E1306C; margin-right: 6px;"></i> ${title}
+                            </p>
+                            <a href="${url}" target="_blank" class="ig-link" style="font-size: 12px; color: #FF8225; text-decoration: none; font-weight: 600;">
+                                Lihat di Instagram <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
     </script>
 </body>
 </html>

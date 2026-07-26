@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Konten - SMARTDASH Astra Infra Toll Road Tangerang-Merak</title>
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        html.dark-mode, body.dark-mode {
+            background-color: #0f172a !important;
+            color: #f1f5f9 !important;
+        }
+
+        .top-bar {
+            display: flex !important;
+            align-items: flex-start !important;
+            justify-content: space-between !important;
+            flex-wrap: wrap !important;
+            gap: 15px !important;
+            margin-bottom: 24px !important;
+            position: sticky !important;
+            top: 0 !important;
+            background-color: #f8fafc !important;
+            z-index: 100 !important;
+            padding-top: 20px !important;
+            padding-bottom: 15px !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+
+        html.dark-mode .top-bar, body.dark-mode .top-bar {
+            background-color: #0f172a !important;
+            border-bottom: 1px solid #1e293b !important;
+        }
+
+        .top-bar-left {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+            flex: 1 !important;
+            min-width: 0 !important;
+        }
+
+        .sidebar-toggle-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: inherit;
+            margin-right: 5px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .main-logo-container img {
+            max-width: 200px !important;
+            height: auto !important;
+            display: block !important;
+        }
+
+        .main-logo-container p {
+            font-size: 13px !important;
+            color: #64748b !important;
+            margin-top: 4px !important;
+            font-weight: 400 !important;
+        }
+
+        .section-title {
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            color: #173B45 !important;
+            margin: 30px 0 15px 0 !important;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 18px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+            border: 1px solid #e2e8f0 !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-card h3 {
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            color: #64748b !important;
+            margin-bottom: 8px !important;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 22px !important;
+            font-weight: 700 !important;
+            color: #173B45 !important;
+        }
+
+        html.dark-mode .stat-card, html.dark-mode .chart-card, html.dark-mode table {
+            background-color: #1e293b !important;
+            border-color: #334155 !important;
+            color: #f1f5f9 !important;
+        }
+
+        html.dark-mode .stat-card .value, html.dark-mode .section-title {
+            color: #f1f5f9 !important;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        html.dark-mode .filter-container {
+            background-color: #1e293b !important;
+            border-color: #334155 !important;
+        }
+
+        .month-select {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            background: #f8fafc;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            font-family: 'Epilogue', sans-serif;
+        }
+        
+        html.dark-mode .month-select {
+            background: #0f172a;
+            color: #f1f5f9;
+            border-color: #334155;
+        }
+
+        .sidebar-close-btn {
+            display: none !important;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-close-btn {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-header-mobile" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px; padding: 0 10px;">
+                <div class="brand-logo-container">
+                    <img src="assets/icons/Logo.svg" alt="Logo Smartdash" class="brand-logo" style="height: 35px;">
+                </div>
+                <button id="sidebar-close" class="sidebar-close-btn" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-label">Application</div>
+                <div class="menu-list">
+                    <a href="dashboard.html" class="menu-item">
+                        <img src="assets/icons/Dashboard.svg" alt="Dashboard" class="menu-icon"> Dashboard
+                    </a>
+                    <a href="#" class="menu-item" id="toggleTimeline">
+                        <img src="assets/icons/calendar.svg" alt="Timeline" class="menu-icon"> Timeline & Log
+                    </a>
+                    <a href="performance.html" class="menu-item active">
+                        <img src="assets/icons/Dashboard.svg" alt="Performance" class="menu-icon"> Performance Konten
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-label">Others</div>
+                <div class="menu-list">
+                    <a href="aktivitas.html" class="menu-item">
+                        <img src="assets/icons/Aktivitas.svg" alt="Icon" class="menu-icon"> Aktivitas Harian
+                    </a>
+                    <a href="pesan.html" class="menu-item">
+                        <img src="assets/icons/message.svg" alt="Icon" class="menu-icon"> Pesan (DM)
+                    </a>
+                    <a href="komentar.html" class="menu-item">
+                        <img src="assets/icons/message.svg" alt="Icon" class="menu-icon"> Komentar
+                    </a>
+                    <a href="setting.html" class="menu-item">
+                        <img src="assets/icons/Setting.svg" alt="Icon" class="menu-icon"> Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">ZA</div>
+                <div class="user-info">
+                    <span class="user-name">Achmad Zaenudin</span>
+                    <span class="user-role">Corporate Communications</span>
+                </div>
+            </div>
+            <a href="index.html" class="logout-btn">Keluar (Logout)</a>
+        </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="main-logo-container">
+                    <img src="assets/icons/SmartDash Panjang.svg" alt="Smart Dash Logo">
+                    <p>System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pilihan Bulan -->
+        <div class="filter-container">
+            <span style="font-size: 13px; font-weight: 700; color: #173B45;">Pilih Bulan:</span>
+            <select id="monthSelector" class="month-select">
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+        </div>
+
+        <!-- Kartu Statistik (11 Metrik) -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Followers Growth</h3>
+                <div class="value" id="val-fol-growth">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Followers</h3>
+                <div class="value" id="val-fol">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Followers Target</h3>
+                <div class="value" id="val-fol-target">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Gap Followers Target</h3>
+                <div class="value" id="val-gap">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Impresi</h3>
+                <div class="value" id="val-impresi">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Reach</h3>
+                <div class="value" id="val-reach">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>AVG Reach</h3>
+                <div class="value" id="val-avg-reach">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Interaction</h3>
+                <div class="value" id="val-interaction">0</div>
+            </div>
+            <div class="stat-card" style="background: #e0f2fe !important;">
+                <h3 style="color: #0369a1 !important;">(By Follower) ER</h3>
+                <div class="value" id="val-er-fol" style="color: #0369a1 !important;">0%</div>
+            </div>
+            <div class="stat-card" style="background: #e0f2fe !important;">
+                <h3 style="color: #0369a1 !important;">(By Reach) ER</h3>
+                <div class="value" id="val-er-reach" style="color: #0369a1 !important;">0%</div>
+            </div>
+            <div class="stat-card" style="background: #fef08a !important;">
+                <h3 style="color: #a16207 !important;">Jumlah Postingan</h3>
+                <div class="value" id="val-post" style="color: #a16207 !important;">0</div>
+            </div>
+        </div>
+
+        <!-- Grafik Performance Full-Width -->
+        <div class="section-title">Grafik Tren Interaksi Konten (Tahunan)</div>
+        <div style="width: 100%; margin-bottom: 40px;">
+            <div class="chart-card" style="background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; width: 100%; box-sizing: border-box;">
+                <div class="chart-container" style="position: relative; height: 320px; width: 100%;">
+                    <canvas id="lineChartPerformance"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+            document.body.classList.add('dark-mode');
+        }
+
+        let globalRekap = [];
+        let performanceChartInst = null;
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzAEc4YWC5ztkdB1PBfiABHZUYB4BF8vExCA8jWel2YIaWZJgNzSG_6VPpccoC_6Hri/exec";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+
+            let currentMonthNum = new Date().getMonth() + 1;
+            let monthSelectorElem = document.getElementById('monthSelector');
+            if(monthSelectorElem) monthSelectorElem.value = currentMonthNum;
+
+            fetch(WEB_APP_URL)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.rekap && data.rekap.length > 0) {
+                        globalRekap = data.rekap;
+                        updateRekapCards(parseInt(monthSelectorElem ? monthSelectorElem.value : currentMonthNum));
+                        updateChart(globalRekap);
+                    }
+                })
+                .catch(err => console.error("Gagal memuat data rekap:", err));
+
+            if(monthSelectorElem) {
+                monthSelectorElem.addEventListener('change', function(e) {
+                    updateRekapCards(parseInt(e.target.value));
+                });
+            }
+
+            // Logika Sidebar Toggle & Close
+            const toggleBtn = document.getElementById("sidebar-toggle");
+            const closeBtn = document.getElementById("sidebar-close");
+            const overlay = document.getElementById("sidebar-overlay");
+
+            function closeSidebar() {
+                document.body.classList.add('sidebar-collapsed');
+                localStorage.setItem('sidebar', 'collapsed');
+            }
+
+            function openSidebar() {
+                document.body.classList.remove('sidebar-collapsed');
+                localStorage.setItem('sidebar', 'expanded');
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (document.body.classList.contains('sidebar-collapsed')) {
+                        openSidebar();
+                    } else {
+                        closeSidebar();
+                    }
+                });
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeSidebar();
+                });
+            }
+
+            if (overlay) {
+                overlay.addEventListener('click', () => {
+                    closeSidebar();
+                });
+            }
+        });
+
+        function initChart() {
+            const ctx = document.getElementById('lineChartPerformance').getContext('2d');
+            performanceChartInst = new Chart(ctx, {
+                type: 'line',
+                data: { 
+                    labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"], 
+                    datasets: [{ 
+                        label: 'Total Interaction', 
+                        data: [], 
+                        borderColor: '#FF8225', 
+                        backgroundColor: 'rgba(255,130,37,0.1)', 
+                        borderWidth: 2.5, 
+                        fill: true, 
+                        tension: 0.4, 
+                        pointRadius: 4, 
+                        pointHoverRadius: 6 
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                        y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        function updateRekapCards(colIndex) {
+            if (!globalRekap || globalRekap.length === 0) return;
+
+            let metrics = {};
+            for(let i = 1; i < globalRekap.length; i++) {
+                let rowName = globalRekap[i][0];
+                if(rowName) {
+                    metrics[rowName.trim()] = globalRekap[i][colIndex]; 
+                }
+            }
+
+            const formatNum = (val) => {
+                if(val === "#DIV/0!" || val === "" || val == null || isNaN(val)) return "0";
+                return Number(val).toLocaleString('id-ID');
+            };
+
+            const formatPercent = (val) => {
+                if(val === "#DIV/0!" || val === "" || val == null) return "0%";
+                if(typeof val === 'number') return (val * 100).toFixed(2) + "%";
+                return val;
+            };
+
+            document.getElementById('val-fol-growth').innerText = formatNum(metrics["Followers Growth"]);
+            document.getElementById('val-fol').innerText = formatNum(metrics["Followers"]);
+            document.getElementById('val-fol-target').innerText = formatNum(metrics["Followers Target"]);
+            document.getElementById('val-gap').innerText = formatNum(metrics["Gap Followers Target"]);
+            document.getElementById('val-impresi').innerText = formatNum(metrics["Total Impresi"]);
+            document.getElementById('val-reach').innerText = formatNum(metrics["Total Reach"]);
+            document.getElementById('val-avg-reach').innerText = formatNum(metrics["AVG Reach"]);
+            document.getElementById('val-interaction').innerText = formatNum(metrics["Total interaction"]);
+            document.getElementById('val-er-fol').innerText = formatPercent(metrics["(By Follower) Engagement Rate"]);
+            document.getElementById('val-er-reach').innerText = formatPercent(metrics["(By Reach) Engagement Rate"]);
+            document.getElementById('val-post').innerText = formatNum(metrics["Jumlah Postingan"]);
+        }
+
+        function updateChart(rekapData) {
+            let rowInteraction = rekapData.find(r => r[0] && r[0].trim() === "Total interaction");
+            let interactionCounts = [];
+            
+            if(rowInteraction) {
+                for(let i = 1; i <= 12; i++) {
+                    interactionCounts.push(Number(rowInteraction[i]) || 0);
+                }
+            }
+
+            if (performanceChartInst) {
+                performanceChartInst.data.datasets[0].data = interactionCounts;
+                performanceChartInst.update();
+            }
+        }
+    </script>
+</body>
+</html>
