@@ -556,6 +556,11 @@
                 tbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">Tidak ada data pada rentang tanggal tersebut.</td></tr>`;
             }
         }
+
+            if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+            document.body.classList.add('dark-mode');
+        }
     </script>
 </body>
 </html>
