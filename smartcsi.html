@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart CSI - SMARTDASH Astra Tol Tamer</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .submenu-container {
+            max-height: 0 !important;
+            overflow: hidden !important;
+            transition: max-height 0.3s ease-out !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        .submenu-container.open {
+            max-height: 250px !important;
+        }
+
+        .sidebar-close-btn {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-close-btn {
+                display: block !important;
+            }
+        }
+
+        .top-bar {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            position: sticky !important;
+            top: 0 !important;
+            background-color: #f8fafc !important;
+            z-index: 100 !important;
+            padding: 15px 20px !important;
+            margin-bottom: 25px !important;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .top-bar-left {
+            display: flex !important;
+            align-items: center !important;
+            gap: 15px !important;
+        }
+
+        .main-logo-container img {
+            height: 32px !important;
+            display: block;
+        }
+
+        html.dark-mode .top-bar, body.dark-mode .top-bar {
+            background-color: #0f172a !important;
+            border-bottom: 1px solid #1e293b !important;
+        }
+
+        .sidebar-toggle-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: inherit;
+        }
+
+        /* Styling Filter Bulan */
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .filter-container label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #334155;
+        }
+        .filter-container select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-family: 'Epilogue', sans-serif;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .table-container {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-header-mobile" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px; padding: 0 10px;">
+                <div class="brand-logo-container">
+                    <img src="assets/icons/Logo.svg" alt="Logo Smartdash" class="brand-logo" style="height: 35px;">
+                </div>
+                <button id="sidebar-close" class="sidebar-close-btn" aria-label="Tutup Menu" style="display: none; background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; padding: 4px 8px;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-label">Application</div>
+                <div class="menu-list">
+                    <a href="dashboard.html" class="menu-item">
+                        <img src="assets/icons/Dashboard.svg" alt="Dashboard" class="menu-icon"> Dashboard
+                    </a>
+                    <a href="aktivitas.html" class="menu-item">
+                        <img src="assets/icons/Aktivitas.svg" alt="Icon" class="menu-icon"> Aktivitas Harian
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-label">Others</div>
+                <div class="menu-list">
+                    <a href="aktivitas.html" class="menu-item">
+                        <img src="assets/icons/Aktivitas.svg" alt="Icon" class="menu-icon"> Aktivitas Harian
+                    </a>
+                    <a href="pesan.html" class="menu-item">
+                        <img src="assets/icons/message.svg" alt="Icon" class="menu-icon"> Pesan (DM)
+                    </a>
+                    <a href="komentar.html" class="menu-item">
+                        <img src="assets/icons/message.svg" alt="Icon" class="menu-icon"> Komentar
+                    </a>
+                    <a href="setting.html" class="menu-item">
+                        <img src="assets/icons/Setting.svg" alt="Icon" class="menu-icon"> Settings
+                    </a>
+                    <a href="smartcsi.html" class="menu-item active">
+                        <img src="assets/icons/Dashboard.svg" alt="Smart CSI" class="menu-icon"> Smart CSI
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">ZA</div>
+                <div class="user-info">
+                    <span class="user-name">Achmad Zaenudin</span>
+                    <span class="user-role">Corporate Communications</span>
+                </div>
+            </div>
+            <a href="index.html" class="logout-btn">Keluar (Logout)</a>
+        </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="main-logo-container">
+                    <img src="assets/icons/SmartDash Panjang.svg" alt="Smart Dash Logo">
+                    <p style="margin: 0; font-size: 12px; color: #64748b;">System Manajemen Aduan Real-time & Database Terintegrasi Astra Tol Tamer.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bulan -->
+        <div class="filter-container">
+            <label for="monthFilter"><i class="fa-solid fa-filter"></i> Filter Bulan:</label>
+            <select id="monthFilter">
+                <option value="all">Semua Bulan</option>
+                <option value="Januari">Januari</option>
+                <option value="Februari">Februari</option>
+                <option value="Maret">Maret</option>
+                <option value="April">April</option>
+                <option value="Mei">Mei</option>
+                <option value="Juni">Juni</option>
+                <option value="Juli">Juli</option>
+                <option value="Agustus">Agustus</option>
+                <option value="September">September</option>
+                <option value="Oktober">Oktober</option>
+                <option value="November">November</option>
+                <option value="Desember">Desember</option>
+            </select>
+        </div>
+
+        <div class="section-title" style="margin-bottom: 10px;">Data Temuan Smart CSI</div>
+        <div class="table-container" style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; border-collapse: collapse; background: #fff;">
+                <thead>
+                    <tr style="background: #f1f3f5; text-align: left;">
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">No</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Segmen</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Awal</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Akhir</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Jalur</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Lajur</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Tanggal</th>
+                        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Bulan</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 20px; color: #777;">Memuat data Smart CSI...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Elemen Overlay untuk Mobile -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- SCRIPT UTAMA -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        let globalCsiData = [];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Logika Toggle Sidebar (Sinkron dengan halaman lain)
+            const toggleBtn = document.getElementById("sidebar-toggle");
+            const closeBtn = document.getElementById("sidebar-close");
+            const overlay = document.getElementById("sidebar-overlay");
+
+            function closeSidebar() {
+                document.body.classList.add("sidebar-collapsed");
+                localStorage.setItem('sidebar', 'collapsed');
+            }
+
+            function openSidebar() {
+                document.body.classList.remove("sidebar-collapsed");
+                localStorage.setItem('sidebar', 'expanded');
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function () {
+                    if (document.body.classList.contains("sidebar-collapsed")) {
+                        openSidebar();
+                    } else {
+                        closeSidebar();
+                    }
+                });
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", closeSidebar);
+            }
+
+            // FETCH DATA DARI GOOGLE APPS SCRIPT
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxBf9rJdSJuUb2g9MzocDjP4zXXoldLvNREiybtJk2FGKqjyuQzsAJeBST2xR4B-TaB/exec"; 
+
+            fetch(WEB_APP_URL)
+                .then(response => response.json())
+                .then(data => {
+                    let rawCsi = data.smartCsi || data.SMART_CSI || [];
+
+                    if (rawCsi.length > 1) {
+                        let headers = rawCsi[0];
+                        for (let i = 1; i < rawCsi.length; i++) {
+                            let rowObj = {};
+                            headers.forEach((header, index) => {
+                                rowObj[header.trim()] = rawCsi[i][index];
+                            });
+                            if (rowObj["Segmen"] || rowObj["Tanggal"] || rowObj["Awal"]) {
+                                globalCsiData.push(rowObj);
+                            }
+                        }
+                    }
+
+                    if (globalCsiData.length === 0) {
+                        globalCsiData = [
+                            { No: "1", Segmen: "0", Awal: "0", Akhir: "0", Jalur: "0", Lajur: "0", Tanggal: "-", Bulan: "-" }
+                        ];
+                    }
+
+                    renderTable(globalCsiData);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    globalCsiData = [
+                        { No: "1", Segmen: "0", Awal: "0", Akhir: "0", Jalur: "0", Lajur: "0", Tanggal: "-", Bulan: "-" }
+                    ];
+                    renderTable(globalCsiData);
+                });
+
+            // Event listener saat pilihan bulan diubah
+            document.getElementById('monthFilter').addEventListener('change', function() {
+                let selectedMonth = this.value;
+                if (selectedMonth === "all") {
+                    renderTable(globalCsiData);
+                } else {
+                    let filtered = globalCsiData.filter(r => {
+                        let bulanVal = String(r["Bulan"] || "").trim();
+                        return bulanVal.toLowerCase() === selectedMonth.toLowerCase();
+                    });
+                    renderTable(filtered);
+                }
+            });
+        });
+
+        function renderTable(dataArray) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = "";
+
+            if (dataArray.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: #777;">Tidak ada data pada bulan ini.</td></tr>`;
+                return;
+            }
+
+            dataArray.forEach((r, index) => {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${r["No"] || (index + 1)}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${r["Segmen"] || "0"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${r["Awal"] || "0"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${r["Akhir"] || "0"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${r["Jalur"] || "0"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${r["Lajur"] || "0"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;">${r["Tanggal"] || "-"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #dee2e6;"><b>${r["Bulan"] || "-"}</b></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>

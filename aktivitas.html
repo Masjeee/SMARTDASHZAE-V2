@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktivitas Harian - SMARTDASH Astra Infra Toll Road Tangerang-Merak</title>
+    <title>Smart CSI - SMARTDASH Astra Infra Toll Road Tangerang-Merak</title>
     <link rel="icon" type="image/png" href="assets/icons/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,66 +21,6 @@
             max-height: 250px !important;
         }
 
-        .submenu-container .filter-box {
-            background-color: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
-            padding: 12px !important;
-            border-radius: 8px !important;
-            margin-top: 6px !important;
-            margin-bottom: 6px !important;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-            box-sizing: border-box !important;
-        }
-
-        .submenu-container .filter-box label {
-            display: block !important;
-            font-family: 'Epilogue', sans-serif !important;
-            font-size: 9px !important;
-            font-weight: 700 !important;
-            color: #173B45 !important;
-            margin-bottom: 3px !important;
-            letter-spacing: 0.5px !important;
-            text-transform: uppercase !important;
-        }
-
-        .submenu-container .filter-box input[type="date"] {
-            width: 100% !important;
-            height: 32px !important;
-            padding: 4px 8px !important;
-            font-family: 'Epilogue', sans-serif !important;
-            font-size: 11px !important;
-            color: #334155 !important;
-            background-color: #ffffff !important;
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 6px !important;
-            margin-bottom: 8px !important;
-            box-sizing: border-box !important;
-            outline: none !important;
-        }
-
-        .submenu-container .filter-box input[type="date"]:focus {
-            border-color: #FF8225 !important;
-        }
-
-        .submenu-container .filter-btn {
-            width: 100% !important;
-            background-color: #FF8225 !important;
-            color: #ffffff !important;
-            border: none !important;
-            padding: 6px !important;
-            border-radius: 6px !important;
-            font-family: 'Epilogue', sans-serif !important;
-            font-weight: 600 !important;
-            font-size: 11px !important;
-            cursor: pointer !important;
-            box-sizing: border-box !important;
-            transition: background 0.2s !important;
-        }
-
-        .submenu-container .filter-btn:hover {
-            background-color: #e06d1c !important;
-        }
-
         /* Sembunyikan tombol close (X) di sidebar desktop */
         .sidebar-close-btn {
             display: none !important;
@@ -95,20 +35,34 @@
         .top-bar {
             position: sticky !important;
             top: 0 !important;
-            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            background-color: #f8fafc !important;
             z-index: 100 !important;
             padding-top: 20px !important;
             padding-bottom: 15px !important;
             margin-bottom: 20px !important;
-            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
         html.dark-mode .top-bar, body.dark-mode .top-bar {
             background-color: #0f172a !important;
             border-bottom: 1px solid #1e293b !important;
         }
 
+        .info-ruas {
+            background: #f8f9fa;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #555;
+            border-left: 4px solid #007bff;
+        }
+
+        html.dark-mode .info-ruas, body.dark-mode .info-ruas {
+            background: #1e293b;
+            color: #cbd5e1;
+            border-left-color: #3b82f6;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/script.js"></script> 
@@ -145,7 +99,7 @@
             <div class="menu-section">
                 <div class="menu-label">Others</div>
                 <div class="menu-list">
-                    <a href="aktivitas.html" class="menu-item active">
+                    <a href="aktivitas.html" class="menu-item">
                         <img src="assets/icons/Aktivitas.svg" alt="Icon" class="menu-icon"> Aktivitas Harian
                     </a>
                     <a href="pesan.html" class="menu-item">
@@ -153,6 +107,9 @@
                     </a>
                     <a href="komentar.html" class="menu-item">
                         <img src="assets/icons/message.svg" alt="Icon" class="menu-icon"> Komentar
+                    </a>
+                    <a href="smartcsi.html" class="menu-item active">
+                        <img src="assets/icons/Dashboard.svg" alt="Smart CSI" class="menu-icon"> Smart CSI
                     </a>
                     <a href="setting.html" class="menu-item">
                         <img src="assets/icons/Setting.svg" alt="Icon" class="menu-icon"> Settings
@@ -186,17 +143,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="info-ruas">
+            <i class="fa-solid fa-road"></i> Cakupan Ruas Pemantauan: <b>KM 26 s.d KM 94+450</b>
+        </div>
         
         <div class="table-card">
-            <div class="table-header-title">Aktivitas Terkini (3 Hari Terakhir)</div>
+            <div class="table-header-title">Data Temuan Smart CSI</div>
             <table>
                 <thead>
                     <tr>
-                        <th width="6%">No</th>
-                        <th width="10%">Waktu Masuk</th>
-                        <th width="10%">Platform / Tipe</th>
-                        <th width="10%">Nama / Akun</th>
-                        <th width="64%">Isi Pesan / Komentar Terbaru</th>
+                        <th width="10%">No</th>
+                        <th width="20%">Tanggal</th>
+                        <th width="35%">Jenis Temuan</th>
+                        <th width="35%">Lokasi</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -215,7 +175,7 @@
             document.body.classList.add('dark-mode');
         }
 
-        // Ambil Data dari Google Apps Script dan Filter 3 Hari Terakhir
+        // Ambil Data dari Google Apps Script untuk Sheet "SMART CSI"
         document.addEventListener("DOMContentLoaded", function() {
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
 
@@ -228,100 +188,64 @@
                     const tbody = document.getElementById('table-body');
                     tbody.innerHTML = '';
 
-                    let rawKomentar = data.komentar || [];
-                    let rawDm = data.dm || [];
-                    let allData = [];
+                    // Sesuaikan dengan nama key dari Apps Script Anda (misal: smartCsi atau smart_csi)
+                    let rawCsi = data.smartCsi || data.SMART_CSI || data.smartcsi || [];
+                    let csiData = [];
 
-                    if (rawKomentar.length > 1) {
-                        let headersKomentar = rawKomentar[0];
-                        for (let i = 1; i < rawKomentar.length; i++) {
+                    if (rawCsi.length > 1) {
+                        let headers = rawCsi[0];
+                        for (let i = 1; i < rawCsi.length; i++) {
                             let rowObj = {};
-                            headersKomentar.forEach((header, index) => {
-                                rowObj[header] = rawKomentar[i][index];
+                            headers.forEach((header, index) => {
+                                rowObj[header] = rawCsi[i][index];
                             });
-                            if (!rowObj["Tipe"]) rowObj["Tipe"] = "Komentar";
-                            allData.push(rowObj);
+                            csiData.push(rowObj);
                         }
                     }
 
-                    if (rawDm.length > 1) {
-                        let headersDm = rawDm[0];
-                        for (let i = 1; i < rawDm.length; i++) {
-                            let rowObj = {};
-                            headersDm.forEach((header, index) => {
-                                rowObj[header] = rawDm[i][index];
-                            });
-                            if (!rowObj["Tipe"]) rowObj["Tipe"] = "Direct Message";
-                            allData.push(rowObj);
-                        }
-                    }
-
-                    function getRowDateStr(r) {
-                        let val = r["Waktu Masuk"] || r["Tanggal dan Waktu"] || r["Waktu"] || r["Tanggal"] || "";
-                        if (!val) return "";
-                        return String(val).substring(0, 10);
-                    }
-
-                    let dates = allData.map(r => getRowDateStr(r)).filter(Boolean);
-                    let filteredRows = allData;
-                    
-                    if (dates.length > 0) {
-                        let maxDate = new Date();
-                        let minDate = new Date(maxDate);
-                        minDate.setDate(minDate.getDate() - 3);
-                        minDate.setHours(0, 0, 0, 0);
-                        maxDate.setHours(23, 59, 59, 999);
-
-                        let tempFiltered = allData.filter(r => {
-                            let rawDateStr = getRowDateStr(r);
-                            if (!rawDateStr) return false;
-                            let rowDate = new Date(rawDateStr + "T00:00:00");
-                            return rowDate >= minDate && rowDate <= maxDate;
-                        });
-
-                        if (tempFiltered.length > 0) {
-                            filteredRows = tempFiltered;
-                        } else {
-                            filteredRows = allData;
-                        }
-                    }
-
-                    if (filteredRows.length === 0) {
-                        tbody.innerHTML = `<tr><td colspan="5" class="empty-state">Tidak ada data sama sekali di spreadsheet.</td></tr>`;
-                        return;
+                    // Jika data masih kosong atau berupa dummy awal, set default 0 & ruas KM sesuai permintaan
+                    if (csiData.length === 0) {
+                        csiData = [
+                            { No: "1", Tanggal: "-", "Jenis Temuan": "0", Lokasi: "KM 26 s.d KM 94+450" },
+                            { No: "2", Tanggal: "-", "Jenis Temuan": "0", Lokasi: "KM 26 s.d KM 94+450" }
+                        ];
                     }
 
                     tbody.innerHTML = "";
-                    filteredRows.forEach((r, index) => {
-                        let tipe = r["Tipe"] || "Direct Message";
-                        let badgeClass = tipe.toLowerCase().includes("komentar") ? "badge-komentar" : "badge-dm";
-                        
-                        let rawWaktu = String(r["Waktu Masuk"] || r["Tanggal dan Waktu"] || r["Waktu"] || r["Tanggal"] || "");
-                        let waktuMasuk = rawWaktu;
-                        
-                        if (!rawWaktu || rawWaktu.includes("1899") || rawWaktu.includes("1899-12-30")) {
-                            waktuMasuk = r["Tanggal"] || "Terbaru";
-                        } else if (rawWaktu.length > 19) {
-                            waktuMasuk = rawWaktu.substring(0, 10) + " " + rawWaktu.substring(11, 19);
-                        }
+                    csiData.forEach((r, index) => {
+                        let noVal = r["No"] || (index + 1);
+                        let tanggalVal = r["Tanggal"] || "-";
+                        let jenisTemuanVal = r["Jenis Temuan"] !== undefined && r["Jenis Temuan"] !== "" ? r["Jenis Temuan"] : "0";
+                        let lokasiVal = r["Lokasi"] || "KM 26 s.d KM 94+450";
 
-                        let namaPengirim = r["Pengirim"] || r["Nama"] || r["Nama / Akun"] || "-";
-                        let isiPesan = r["Isi Pesan"] || r["Pesan"] || "-";
-                        
                         let tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${index + 1}</td>
-                            <td>${waktuMasuk}</td>
-                            <td><span class="badge-type ${badgeClass}">${tipe}</span></td>
-                            <td><b>${namaPengirim}</b></td>
-                            <td>${isiPesan}</td>
+                            <td>${noVal}</td>
+                            <td>${tanggalVal}</td>
+                            <td>${jenisTemuanVal}</td>
+                            <td><b>${lokasiVal}</b></td>
                         `;
                         tbody.appendChild(tr);
                     });
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('table-body').innerHTML = `<tr><td colspan="5" class="empty-state" style="color: #B43F3F;">Gagal memuat data dari Google Spreadsheet.</td></tr>`;
+                    // Fallback data dummy 0 jika fetch gagal / offline
+                    const tbody = document.getElementById('table-body');
+                    tbody.innerHTML = `
+                        <tr>
+                            <td>1</td>
+                            <td>-</td>
+                            <td>0</td>
+                            <td><b>KM 26 s.d KM 94+450</b></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>-</td>
+                            <td>0</td>
+                            <td><b>KM 26 s.d KM 94+450</b></td>
+                        </tr>
+                    `;
                 });
         });
 
