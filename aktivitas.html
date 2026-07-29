@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart CSI - SMARTDASH Astra Infra Toll Road Tangerang-Merak</title>
+    <title>Aktivitas Harian - SMARTDASH Astra Infra Toll Road Tangerang-Merak</title>
     <link rel="icon" type="image/png" href="assets/icons/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,7 +21,6 @@
             max-height: 250px !important;
         }
 
-        /* Sembunyikan tombol close (X) di sidebar desktop */
         .sidebar-close-btn {
             display: none !important;
         }
@@ -55,19 +54,19 @@
             margin-bottom: 20px;
             font-size: 14px;
             color: #555;
-            border-left: 4px solid #007bff;
+            border-left: 4px solid #10b981;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         html.dark-mode .info-ruas, body.dark-mode .info-ruas {
             background: #1e293b;
             color: #cbd5e1;
-            border-left-color: #3b82f6;
+            border-left-color: #10b981;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="assets/js/script.js"></script> 
 </head>
-
 <body>
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -99,7 +98,7 @@
             <div class="menu-section">
                 <div class="menu-label">Others</div>
                 <div class="menu-list">
-                    <a href="aktivitas.html" class="menu-item">
+                    <a href="aktivitas.html" class="menu-item active">
                         <img src="assets/icons/Aktivitas.svg" alt="Icon" class="menu-icon"> Aktivitas Harian
                     </a>
                     <a href="pesan.html" class="menu-item">
@@ -145,22 +144,28 @@
         </div>
 
         <div class="info-ruas">
-            <i class="fa-solid fa-road"></i> Cakupan Ruas Pemantauan: <b>KM 26 s.d KM 94+450</b>
+            <div>
+                <i class="fa-solid fa-clock-rotate-left"></i> <b>Aktivitas & Perbincangan Terbaru:</b> Menampilkan data interaksi DM & Komentar dalam 3 hari terakhir.
+            </div>
+            <div id="filter-status" style="font-size: 12px; font-weight: 600; color: #10b981;">Memuat data...</div>
         </div>
         
         <div class="table-card">
-            <div class="table-header-title">Data Temuan Smart CSI</div>
+            <div class="table-header-title">Log Perbincangan Terbaru (3 Hari Terakhir)</div>
             <table>
                 <thead>
                     <tr>
-                        <th width="10%">No</th>
-                        <th width="20%">Tanggal</th>
-                        <th width="35%">Jenis Temuan</th>
-                        <th width="35%">Lokasi</th>
+                        <th width="8%">No</th>
+                        <th width="15%">Tanggal / Waktu</th>
+                        <th width="15%">Sumber</th>
+                        <th width="15%">Pengirim / Nama</th>
+                        <th width="47%">Isi Pesan / Komentar</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    <!-- Data akan dimuat secara dinamis via JavaScript -->
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px; color: #777;">Memuat data aktivitas perbincangan...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -175,7 +180,7 @@
             document.body.classList.add('dark-mode');
         }
 
-        // Ambil Data dari Google Apps Script untuk Sheet "SMART CSI"
+        // Ambil Data Aktivitas dari Google Apps Script (Menggabungkan DM & Komentar)
         document.addEventListener("DOMContentLoaded", function() {
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
 
@@ -188,64 +193,82 @@
                     const tbody = document.getElementById('table-body');
                     tbody.innerHTML = '';
 
-                    // Sesuaikan dengan nama key dari Apps Script Anda (misal: smartCsi atau smart_csi)
-                    let rawCsi = data.smartCsi || data.SMART_CSI || data.smartcsi || [];
-                    let csiData = [];
+                    // Ambil data DM dan Komentar dari spreadsheet
+                    let rawDm = data.dm || data.DM || [];
+                    let rawKomentar = data.komentar || data.KOMENTAR || [];
+                    let combinedData = [];
 
-                    if (rawCsi.length > 1) {
-                        let headers = rawCsi[0];
-                        for (let i = 1; i < rawCsi.length; i++) {
-                            let rowObj = {};
-                            headers.forEach((header, index) => {
-                                rowObj[header] = rawCsi[i][index];
-                            });
-                            csiData.push(rowObj);
+                    // Fungsi pembantu untuk parsing baris data
+                    function parseSheetData(rawArray, sourceName) {
+                        if (rawArray.length > 1) {
+                            let headers = rawArray[0];
+                            for (let i = 1; i < rawArray.length; i++) {
+                                let rowObj = {};
+                                headers.forEach((header, index) => {
+                                    rowObj[header.trim().toLowerCase()] = rawArray[i][index];
+                                });
+                                
+                                let pengirim = String(rowObj["pengirim"] || rowObj["nama"] || "-").trim();
+                                // Abaikan jika pengirimnya "Astra Tol Tamer"
+                                if (pengirim.toLowerCase() !== "astra tol tamer") {
+                                    combinedData.push({
+                                        tanggal: rowObj["tanggal"] || rowObj["date"] || "-",
+                                        waktu: rowObj["waktu"] || rowObj["time"] || "",
+                                        sumber: sourceName,
+                                        pengirim: pengirim,
+                                        pesan: rowObj["isi pesan"] || rowObj["komentar"] || rowObj["pesan"] || "-"
+                                    });
+                                }
+                            }
                         }
                     }
 
-                    // Jika data masih kosong atau berupa dummy awal, set default 0 & ruas KM sesuai permintaan
-                    if (csiData.length === 0) {
-                        csiData = [
-                            { No: "1", Tanggal: "-", "Jenis Temuan": "0", Lokasi: "KM 26 s.d KM 94+450" },
-                            { No: "2", Tanggal: "-", "Jenis Temuan": "0", Lokasi: "KM 26 s.d KM 94+450" }
-                        ];
+                    parseSheetData(rawDm, "Direct Message (DM)");
+                    parseSheetData(rawKomentar, "Komentar Instagram");
+
+                    // Urutkan berdasarkan tanggal terbaru jika ada
+                    combinedData.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+
+                    // Filter Batas 3 Hari Terakhir
+                    // Mencari tanggal maksimal dalam data, atau menggunakan tanggal hari ini (system time 2026)
+                    let filteredData = combinedData;
+                    if (combinedData.length > 0) {
+                        // Cari tanggal terbaru dari data untuk dijadikan acuan "hari ini" di data tersebut
+                        let dates = combinedData.map(item => new Date(item.tanggal)).filter(d => !isNaN(d));
+                        if (dates.length > 0) {
+                            let maxDate = new Date(Math.max.apply(null, dates));
+                            let thresholdDate = new Date(maxDate);
+                            thresholdDate.setDate(maxDate.getDate() - 3); // Batas 3 hari ke belakang
+
+                            filteredData = combinedData.filter(item => {
+                                let itemDate = new Date(item.tanggal);
+                                return isNaN(itemDate) || (itemDate >= thresholdDate && itemDate <= maxDate);
+                            });
+                        }
                     }
 
-                    tbody.innerHTML = "";
-                    csiData.forEach((r, index) => {
-                        let noVal = r["No"] || (index + 1);
-                        let tanggalVal = r["Tanggal"] || "-";
-                        let jenisTemuanVal = r["Jenis Temuan"] !== undefined && r["Jenis Temuan"] !== "" ? r["Jenis Temuan"] : "0";
-                        let lokasiVal = r["Lokasi"] || "KM 26 s.d KM 94+450";
+                    document.getElementById('filter-status').innerText = `Menampilkan ${filteredData.length} perbincangan (3 Hari Terakhir)`;
 
+                    if (filteredData.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: #777;">Tidak ada perbincangan dalam 3 hari terakhir.</td></tr>`;
+                        return;
+                    }
+
+                    filteredData.forEach((r, index) => {
                         let tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${noVal}</td>
-                            <td>${tanggalVal}</td>
-                            <td>${jenisTemuanVal}</td>
-                            <td><b>${lokasiVal}</b></td>
+                            <td>${index + 1}</td>
+                            <td>${r.tanggal} ${r.waktu}</td>
+                            <td><span style="background: #e2e8f0; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${r.sumber}</span></td>
+                            <td><b>${r.pengirim}</b></td>
+                            <td>${r.pesan}</td>
                         `;
                         tbody.appendChild(tr);
                     });
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // Fallback data dummy 0 jika fetch gagal / offline
-                    const tbody = document.getElementById('table-body');
-                    tbody.innerHTML = `
-                        <tr>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>0</td>
-                            <td><b>KM 26 s.d KM 94+450</b></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>-</td>
-                            <td>0</td>
-                            <td><b>KM 26 s.d KM 94+450</b></td>
-                        </tr>
-                    `;
+                    document.getElementById('table-body').innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: red;">Gagal memuat data dari server.</td></tr>`;
                 });
         });
 
