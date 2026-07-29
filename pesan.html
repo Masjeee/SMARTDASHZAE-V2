@@ -315,6 +315,40 @@
         let sentimentChartInst = null;
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
+        fetch(WEB_APP_URL)
+                .then(response => response.json())
+                .then(data => {
+                    // Pastikan mengambil data DM/pesan
+                    let rawData = data.dm || data.pesan || [];
+                    let processedData = [];
+
+                    if (rawData.length > 1) {
+                        let headers = rawData[0];
+                        for (let i = 1; i < rawData.length; i++) {
+                            let rowObj = {};
+                            headers.forEach((header, index) => {
+                                rowObj[header.trim()] = rawData[i][index];
+                            });
+
+                            // --- LOGIKA FILTER: Abaikan/Sembunyikan jika Pengirim adalah "Astra Tol Tamer" ---
+                            let pengirim = String(rowObj["Pengirim"] || rowObj["Nama"] || "").trim();
+                            if (pengirim.toLowerCase() === "astra tol tamer") {
+                                continue; // Lewati baris ini, tidak akan dimunculkan di halaman pesan
+                            }
+
+                            // Masukkan ke array jika lolos filter
+                            if (rowObj["Isi Pesan"] || rowObj["Tanggal"] || rowObj["Pengirim"]) {
+                                processedData.push(rowObj);
+                            }
+                        }
+                    }
+
+                    // Lanjutkan render data ke tabel pesan kamu di sini...
+                    renderMessageTable(processedData);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
 
         document.addEventListener('DOMContentLoaded', () => {
             // Logika Sidebar
