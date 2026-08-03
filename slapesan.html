@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLA Pesan & Analisis Komplain - SMARTDASH</title>
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .sidebar-close-btn { display: none !important; }
+        @media (max-width: 768px) { .sidebar-close-btn { display: block !important; } }
+        .top-bar { position: sticky !important; top: 0 !important; background-color: #f8fafc !important; z-index: 100 !important; padding-top: 20px !important; padding-bottom: 15px !important; margin-bottom: 20px !important; border-bottom: 1px solid #e2e8f0; }
+        .section-title { font-size: 16px !important; font-weight: 700 !important; color: #173B45 !important; margin: 30px 0 15px 0 !important; }
+        .stat-card { background: #ffffff !important; border-radius: 12px !important; padding: 20px !important; box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important; border: 1px solid #e2e8f0 !important; }
+        .stat-card h3 { font-size: 11px !important; font-weight: 600 !important; color: #64748b !important; margin-bottom: 8px !important; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 26px !important; font-weight: 700 !important; color: #173B45 !important; }
+        .multi-filter-container { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .filter-row-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 15px; }
+        .year-filter-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; }
+        .year-filter-card h4 { font-family: 'Epilogue', sans-serif; font-size: 13px; font-weight: 700; color: #173B45; margin-bottom: 10px; border-bottom: 2px solid #FF8225; padding-bottom: 5px; }
+        .filter-inputs-flex { display: flex; gap: 10px; }
+        .filter-group { flex: 1; }
+        .filter-group label { display: block; font-family: 'Epilogue', sans-serif; font-size: 9px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+        .filter-group input[type="date"] { width: 100%; height: 34px; padding: 4px 6px; font-family: 'Epilogue', sans-serif; font-size: 11px; color: #334155; background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; outline: none; }
+        .apply-btn-wrapper { text-align: right; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+        .inline-filter-btn { height: 40px; background-color: #FF8225; color: #ffffff; border: none; padding: 0 30px; border-radius: 8px; font-family: 'Epilogue', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s; }
+        .inline-filter-btn:hover { background-color: #e06d1c; }
+        table th { font-size: 12px !important; font-weight: 700 !important; color: #173B45 !important; padding: 10px !important; }
+        table td { font-size: 13px !important; color: #334155 !important; padding: 10px !important; }
+        .year-section-title { background: #173B45; color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 700; margin: 25px 0 15px 0; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-header-mobile" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px; padding: 0 10px;">
+                <div class="brand-logo-container"><img src="assets/icons/Logo.svg" alt="Logo" class="brand-logo" style="height: 35px;"></div>
+                <button id="sidebar-close" class="sidebar-close-btn" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="menu-section">
+                <div class="menu-label">Application</div>
+                <div class="menu-list">
+                    <a href="dashboard.html" class="menu-item"><img src="assets/icons/Dashboard.svg" class="menu-icon"> Dashboard</a>
+                    <a href="performance.html" class="menu-item"><img src="assets/icons/Dashboard.svg" class="menu-icon"> Performance Konten</a>
+                </div>
+            </div>
+            <div class="menu-section">
+                <div class="menu-label">Others</div>
+                <div class="menu-list">
+                    <a href="aktivitas.html" class="menu-item"><img src="assets/icons/Aktivitas.svg" class="menu-icon"> Aktivitas Harian</a>
+                    <a href="pesan.html" class="menu-item"><img src="assets/icons/message.svg" class="menu-icon"> Pesan (DM)</a>
+                    <a href="komentar.html" class="menu-item"><img src="assets/icons/message.svg" class="menu-icon"> Komentar</a>
+                    <a href="sla_pesan.html" class="menu-item active"><img src="assets/icons/Dashboard.svg" class="menu-icon"> SLA Pesan</a>
+                    <a href="smartcsi.html" class="menu-item"><img src="assets/icons/Dashboard.svg" class="menu-icon"> Smart CSI</a>
+                    <a href="setting.html" class="menu-item"><img src="assets/icons/Setting.svg" class="menu-icon"> Settings</a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">ZA</div>
+                <div class="user-info"><span class="user-name">Achmad Zaenudin</span><span class="user-role">Corporate Communications</span></div>
+            </div>
+            <a href="index.html" class="logout-btn">Keluar (Logout)</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="top-bar">
+            <div class="top-bar-left" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button id="sidebar-toggle" class="sidebar-toggle-btn"><i class="fa-solid fa-bars"></i></button>
+                    <div class="main-logo-container">
+                        <img src="assets/icons/SmartDash Panjang.svg">
+                        <p>Monitoring performa terpisah per tahun (2024, 2025, 2026).</p>
+                    </div>
+                </div>
+                <div><span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: 20px;">Astra Tol Tamer</span></div>
+            </div>
+        </div>
+        
+        <!-- FILTER PER TAHUN -->
+        <div class="multi-filter-container">
+            <div class="filter-row-grid">
+                <div class="year-filter-card">
+                    <h4>Periode Tahun 2024</h4>
+                    <div class="filter-inputs-flex">
+                        <div class="filter-group"><label>Dari Tanggal</label><input type="date" id="start2024" value="2024-01-01"></div>
+                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2024" value="2024-04-30"></div>
+                    </div>
+                </div>
+                <div class="year-filter-card">
+                    <h4>Periode Tahun 2025</h4>
+                    <div class="filter-inputs-flex">
+                        <div class="filter-group"><label>Dari Tanggal</label><input type="date" id="start2025" value="2025-01-01"></div>
+                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2025" value="2025-04-30"></div>
+                    </div>
+                </div>
+                <div class="year-filter-card">
+                    <h4>Periode Tahun 2026</h4>
+                    <div class="filter-inputs-flex">
+                        <div class="filter-group"><label>Dari Tanggal</label><input type="date" id="start2026" value="2026-01-01"></div>
+                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2026" value="2026-04-30"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="apply-btn-wrapper">
+                <button class="inline-filter-btn" id="applyFilterBtn">Terapkan & Bandingkan</button>
+            </div>
+        </div>
+
+        <div class="section-title">Kategori Komplain Keseluruhan</div>
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px;">
+            <div class="stat-card"><h3>LALU LINTAS</h3><div class="value" id="val-lalin-total">0</div></div>
+            <div class="stat-card"><h3>FASILITAS</h3><div class="value" id="val-fasilitas-total">0</div></div>
+            <div class="stat-card"><h3>STRUK DIGITAL</h3><div class="value" id="val-struk-total">0</div></div>
+        </div>
+
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px;">
+            <div class="stat-card"><h3>TOTAL KELUHAN KESELURUHAN</h3><div class="value" id="val-total-keluhan" style="color: #2563eb;">0</div></div>
+            <div class="stat-card"><h3>STATUS DASHBOARD</h3><div class="value" style="font-size: 16px !important; color: #16a34a; display: flex; align-items: center; gap: 8px; margin-top: 4px;"><span style="width: 10px; height: 10px; background-color: #16a34a; border-radius: 50%; display: inline-block;"></span> 3 Kategori Utama</div></div>
+        </div>
+
+        <!-- GRAFIK UTAMA: COMBO CHART -->
+        <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
+            <h3 style="font-size: 15px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Komparasi Volume Keluhan & Tren SLA Antar Tahun</h3>
+            <div class="chart-container" style="position: relative; height: 320px;"><canvas id="comboChart"></canvas></div>
+        </div>
+
+        <!-- ================= ANALISIS TERPISAH TAHUN 2024 ================= -->
+        <div class="year-section-title">Analisis Mendalam Tahun 2024</div>
+        <div class="charts-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+            <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h3 style="font-size: 14px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Kategori Komplain (2024)</h3>
+                <div class="chart-container" style="position: relative; height: 250px; display: flex; justify-content: center; align-items: center;"><canvas id="categoryChart2024"></canvas></div>
+            </div>
+            <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h3 style="font-size: 14px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Tonality Pesan (2024)</h3>
+                <div class="chart-container" style="position: relative; height: 250px; display: flex; justify-content: center; align-items: center;"><canvas id="tonalityChart2024"></canvas></div>
+            </div>
+        </div>
+
+        <!-- ================= ANALISIS TERPISAH TAHUN 2025 ================= -->
+        <div class="year-section-title">Analisis Mendalam Tahun 2025</div>
+        <div class="charts-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+            <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h3 style="font-size: 14px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Kategori Komplain (2025)</h3>
+                <div class="chart-container" style="position: relative; height: 250px; display: flex; justify-content: center; align-items: center;"><canvas id="categoryChart2025"></canvas></div>
+            </div>
+            <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h3 style="font-size: 14px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Tonality Pesan (2025)</h3>
+                <div class="chart-container" style="position: relative; height: 250px; display: flex; justify-content: center; align-items: center;"><canvas id="tonalityChart2025"></canvas></div>
+            </div>
+        </div>
+
+        <!-- ================= ANALISIS TERPISAH TAHUN 2026 ================= -->
+        <div class="year-section-title">Analisis Mendalam Tahun 2026</div>
+        <div class="charts-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+            <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h3 style="font-size: 14px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Kategori Komplain (2026)</h3>
+                <div class="chart-container" style="position: relative; height: 250px; display: flex; justify-content: center; align-items: center;"><canvas id="categoryChart2026"></canvas></div>
+            </div>
+            <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h3 style="font-size: 14px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Tonality Pesan (2026)</h3>
+                <div class="chart-container" style="position: relative; height: 250px; display: flex; justify-content: center; align-items: center;"><canvas id="tonalityChart2026"></canvas></div>
+            </div>
+        </div>
+
+        <!-- TABEL RINCIAN -->
+        <div class="section-title">Tabel Rincian Respon & Klasifikasi Otomatis (Sampel 10 Representatif)</div>
+        <div class="stat-card" style="padding: 20px; overflow-x: auto;">
+            <table width="100%" id="table-sla-pesan" border="0" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #e2e8f0; color: #173B45;">
+                        <th>TANGGAL</th>
+                        <th>PENGIRIM</th>
+                        <th>ISI PESAN</th>
+                        <th>KATEGORI</th>
+                        <th>TOPIK UNIK</th>
+                        <th>SLA RESPON</th>
+                        <th>TONALITY</th>
+                    </tr>
+                </thead>
+                <tbody><tr><td colspan="7" style="text-align: center;">Memuat data CSV...</td></tr></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        let globalSlaRows = [];
+        let comboChartInst = null;
+        let chartsMap = {};
+
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmhQw8lGi2QE-1ag38831k7cNgqQbeiW_Ywc95AoYh0VvzZjNmMqeAvRJ77gbgAw/pub?output=csv";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('applyFilterBtn').addEventListener('click', prosesFilterMultiTahun);
+            initCharts();
+
+            fetch(CSV_URL)
+                .then(response => response.text())
+                .then(csvText => {
+                    let lines = csvText.split("\n");
+                    if (lines.length < 2) return;
+
+                    let headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, ''));
+                    globalSlaRows = [];
+
+                    for (let i = 1; i < lines.length; i++) {
+                        let rowStr = lines[i].trim();
+                        if (!rowStr) continue;
+
+                        let rowCols = [];
+                        let inQuotes = false;
+                        let currentCol = "";
+                        for (let char of rowStr) {
+                            if (char === '"') {
+                                inQuotes = !inQuotes;
+                            } else if (char === ',' && !inQuotes) {
+                                rowCols.push(currentCol.trim().replace(/^"|"$/g, ''));
+                                currentCol = "";
+                            } else {
+                                currentCol += char;
+                            }
+                        }
+                        rowCols.push(currentCol.trim().replace(/^"|"$/g, ''));
+
+                        let rowObj = {};
+                        headers.forEach((h, index) => {
+                            rowObj[h] = rowCols[index] || "";
+                        });
+
+                        let pengirim = String(rowObj["Nama Pengirim"] || rowObj["Pengirim"] || "").trim();
+                        if (pengirim.toLowerCase().includes("astra tol tamer")) continue;
+
+                        // Pembatasan Kategori HANYA: Lalu Lintas, Struk Digital, Fasilitas
+                        let rawKat = String(rowObj["Kategori"] || "").trim().toLowerCase();
+                        let pesan = String(rowObj["Isi Pesan Keluhan"] || rowObj["Isi Pesan"] || "").toLowerCase();
+                        
+                        let kategori = "Fasilitas"; // Default fallback
+
+                        if (rawKat.includes("lalu lintas") || rawKat.includes("lalin") || pesan.match(/macet|padat|lalin|jalan|lalu lintas|tol|kendaraan|mobil/)) {
+                            kategori = "Lalu Lintas";
+                        } else if (rawKat.includes("struk") || rawKat.includes("digital") || pesan.match(/saldo|etoll|e-toll|kartu|struk|topup|top up|rfid|flo|pembayaran|transaksi/)) {
+                            kategori = "Struk Digital";
+                        } else {
+                            kategori = "Fasilitas";
+                        }
+
+                        let topik = String(rowObj["Topik Unik"] || "Keluhan Umum").trim();
+                        let manualSentiment = String(rowObj["Klasifikasi_Manual"] || "").trim().toLowerCase();
+                        
+                        let tonality = "Netral";
+                        if (manualSentiment === "positive" || manualSentiment === "positif" || manualSentiment === "apresiasi") {
+                            tonality = "Positif";
+                        } else if (manualSentiment === "negative" || manualSentiment === "negatif" || manualSentiment === "komplain") {
+                            tonality = "Negatif";
+                        } else {
+                            if (pesan.match(/rusak|parah|kecewa|buruk|lama|lambat|gagal|error|benci|payah|komplain|protes|mengecewakan/)) {
+                                tonality = "Negatif";
+                            } else if (pesan.match(/terima kasih|bagus|mantap|hebat|lancar|baik|sukses/)) {
+                                tonality = "Positif";
+                            }
+                        }
+
+                        rowObj["Auto_Kategori"] = kategori;
+                        rowObj["Auto_Topik"] = topik;
+                        rowObj["Auto_Tonality"] = tonality;
+
+                        globalSlaRows.push(rowObj);
+                    }
+                    prosesFilterMultiTahun();
+                })
+                .catch(err => console.error("Gagal memuat file CSV:", err));
+        });
+
+        function initCharts() {
+            const ctxCombo = document.getElementById('comboChart').getContext('2d');
+            comboChartInst = new Chart(ctxCombo, {
+                type: 'bar',
+                data: {
+                    labels: ['2024', '2025', '2026'],
+                    datasets: [{
+                        label: 'Jumlah Keluhan',
+                        data: [0, 0, 0],
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 2,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Rata-Rata SLA (Jam)',
+                        data: [0, 0, 0],
+                        type: 'line',
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderWidth: 3,
+                        tension: 0.1,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    scales: {
+                        y: { type: 'linear', position: 'left', title: { display: true, text: 'Jumlah Keluhan' }, grid: { display: true, color: '#f1f5f9' } },
+                        y1: { type: 'linear', position: 'right', title: { display: true, text: 'SLA (Jam)' }, grid: { drawOnChartArea: false } }
+                    }
+                }
+            });
+
+            ['2024', '2025', '2026'].forEach(yr => {
+                let ctxCat = document.getElementById('categoryChart' + yr).getContext('2d');
+                chartsMap['cat_' + yr] = new Chart(ctxCat, {
+                    type: 'doughnut',
+                    data: { 
+                        labels: ['Lalu Lintas', 'Fasilitas', 'Struk Digital'], 
+                        datasets: [{ 
+                            data: [0, 0, 0], 
+                            backgroundColor: ['#f4e8e8', '#f97316', '#882222'] 
+                        }] 
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        cutout: '65%',
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } 
+                    }
+                });
+
+                let ctxTon = document.getElementById('tonalityChart' + yr).getContext('2d');
+                chartsMap['ton_' + yr] = new Chart(ctxTon, {
+                    type: 'doughnut',
+                    data: { 
+                        labels: ['Positif', 'Netral', 'Negatif'], 
+                        datasets: [{ 
+                            data: [0, 0, 0], 
+                            backgroundColor: ['#10B981', '#f97316', '#B43F3F'] 
+                        }] 
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        cutout: '65%',
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } 
+                    }
+                });
+            });
+        }
+
+        function timeToSeconds(tStr) {
+            if (!tStr || tStr === "-" || tStr === "Belum Dibalas") return 0;
+            let parts = String(tStr).split(":");
+            if (parts.length !== 3) return 0;
+            return (parseInt(parts[0]) || 0) * 3600 + (parseInt(parts[1]) || 0) * 60 + (parseInt(parts[2]) || 0);
+        }
+
+        function prosesFilterMultiTahun() {
+            let start24 = new Date(document.getElementById('start2024').value);
+            let end24 = new Date(document.getElementById('end2024').value); end24.setHours(23, 59, 59, 999);
+            let start25 = new Date(document.getElementById('start2025').value);
+            let end25 = new Date(document.getElementById('end2025').value); end25.setHours(23, 59, 59, 999);
+            let start26 = new Date(document.getElementById('start2026').value);
+            let end26 = new Date(document.getElementById('end2026').value); end26.setHours(23, 59, 59, 999);
+
+            let statsPerYear = {
+                "2024": { count: 0, totalSec: 0, validCount: 0, rows: [] },
+                "2025": { count: 0, totalSec: 0, validCount: 0, rows: [] },
+                "2026": { count: 0, totalSec: 0, validCount: 0, rows: [] }
+            };
+
+            globalSlaRows.forEach(r => {
+                let tglStr = String(r["Tanggal"] || r["Date"] || "").trim();
+                if (!tglStr) return;
+                let d = new Date(tglStr);
+                if (isNaN(d.getTime())) return;
+
+                let year = String(d.getFullYear());
+
+                if (year === "2024" && d >= start24 && d <= end24) {
+                    statsPerYear["2024"].count++; statsPerYear["2024"].rows.push(r);
+                    let sec = timeToSeconds(r["SLA (Durasi Respon)"] || r["SLA"]);
+                    if (sec > 0) { statsPerYear["2024"].totalSec += sec; statsPerYear["2024"].validCount++; }
+                } else if (year === "2025" && d >= start25 && d <= end25) {
+                    statsPerYear["2025"].count++; statsPerYear["2025"].rows.push(r);
+                    let sec = timeToSeconds(r["SLA (Durasi Respon)"] || r["SLA"]);
+                    if (sec > 0) { statsPerYear["2025"].totalSec += sec; statsPerYear["2025"].validCount++; }
+                } else if (year === "2026" && d >= start26 && d <= end26) {
+                    statsPerYear["2026"].count++; statsPerYear["2026"].rows.push(r);
+                    let sec = timeToSeconds(r["SLA (Durasi Respon)"] || r["SLA"]);
+                    if (sec > 0) { statsPerYear["2026"].totalSec += sec; statsPerYear["2026"].validCount++; }
+                }
+            });
+
+            updateUI(statsPerYear);
+        }
+
+        function updateUI(statsPerYear) {
+            let allRows = [...statsPerYear["2024"].rows, ...statsPerYear["2025"].rows, ...statsPerYear["2026"].rows];
+            document.getElementById('val-total-keluhan').innerText = allRows.length;
+
+            let totalLalin = 0, totalFasilitas = 0, totalStruk = 0;
+            allRows.forEach(r => {
+                let cat = r["Auto_Kategori"];
+                if (cat === "Lalu Lintas") totalLalin++;
+                else if (cat === "Fasilitas") totalFasilitas++;
+                else if (cat === "Struk Digital") totalStruk++;
+            });
+
+            document.getElementById('val-lalin-total').innerText = totalLalin;
+            document.getElementById('val-fasilitas-total').innerText = totalFasilitas;
+            document.getElementById('val-struk-total').innerText = totalStruk;
+
+            let sortedYears = ["2024", "2025", "2026"];
+            let countList = sortedYears.map(y => statsPerYear[y].count);
+            let avgSlaHoursList = sortedYears.map(y => {
+                let vCount = statsPerYear[y].validCount;
+                let avgSec = vCount > 0 ? statsPerYear[y].totalSec / vCount : 0;
+                return parseFloat((avgSec / 3600).toFixed(2));
+            });
+
+            if (comboChartInst) {
+                comboChartInst.data.labels = sortedYears;
+                comboChartInst.data.datasets[0].data = countList;
+                comboChartInst.data.datasets[1].data = avgSlaHoursList;
+                comboChartInst.update();
+            }
+
+            sortedYears.forEach(yr => {
+                let yrRows = statsPerYear[yr].rows;
+
+                let cLalin = 0, cFasilitas = 0, cStruk = 0;
+                yrRows.forEach(r => {
+                    let cat = r["Auto_Kategori"];
+                    if (cat === "Lalu Lintas") cLalin++;
+                    else if (cat === "Fasilitas") cFasilitas++;
+                    else if (cat === "Struk Digital") cStruk++;
+                });
+
+                let catChart = chartsMap['cat_' + yr];
+                if (catChart) {
+                    catChart.data.datasets[0].data = [cLalin, cFasilitas, cStruk];
+                    catChart.update();
+                }
+
+                let cPos = 0, cNet = 0, cNeg = 0;
+                yrRows.forEach(r => {
+                    let ton = r["Auto_Tonality"];
+                    if (ton === "Positif") cPos++;
+                    else if (ton === "Netral") cNet++;
+                    else if (ton === "Negatif") cNeg++;
+                });
+
+                let tonChart = chartsMap['ton_' + yr];
+                if (tonChart) {
+                    tonChart.data.datasets[0].data = [cPos, cNet, cNeg];
+                    tonChart.update();
+                }
+            });
+
+            let sampledRows = allRows.slice(0, 10);
+            let tbody = document.querySelector("#table-sla-pesan tbody");
+            if (tbody) {
+                tbody.innerHTML = "";
+                if (sampledRows.length > 0) {
+                    sampledRows.forEach(row => {
+                        let tr = document.createElement("tr");
+                        tr.style.borderBottom = "1px solid #f1f5f9";
+                        tr.innerHTML = `
+                            <td>${row["Tanggal"] ? String(row["Tanggal"]).substring(0, 10) : ''}</td>
+                            <td>${row["Nama Pengirim"] || row["Pengirim"] || '-'}</td>
+                            <td>${row["Isi Pesan Keluhan"] || row["Isi Pesan"] || '-'}</td>
+                            <td><span style="font-weight:600; color:#2563eb;">${row["Auto_Kategori"]}</span></td>
+                            <td>${row["Auto_Topik"]}</td>
+                            <td><span style="font-weight: 600; color: #FF8225;">${row["SLA (Durasi Respon)"] || '-'}</span></td>
+                            <td>${row["Auto_Tonality"]}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Tidak ada data untuk rentang tanggal tersebut.</td></tr>`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
