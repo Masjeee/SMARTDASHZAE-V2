@@ -45,6 +45,46 @@ document.addEventListener("DOMContentLoaded", function() {
     // Inisialisasi Grafik Chart.js
     initCharts();
 
+    // --- FITUR LOADING OVERLAY OTOMATIS ---
+    // --- CUSTOM LOADING OVERLAY ---
+    // --- CUSTOM LOADING OVERLAY DENGAN LOGO SMARTDASH ---
+    let loadingOverlay = document.getElementById('loading-overlay');
+    if (!loadingOverlay) {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.id = 'loading-overlay';
+        loadingOverlay.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.4s ease;";
+        
+        loadingOverlay.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <!-- Logo SmartDash dengan Animasi Berdenyut (Pulse) -->
+                <img src="assets/icons/SmartDash Panjang.svg" alt="SmartDash Logo" style="width: 220px; height: auto; margin-bottom: 24px; animation: pulseLogo 1.5s ease-in-out infinite;">
+                
+                <!-- Lingkaran Spinner Modern -->
+                <div style="width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.15); border-top: 3px solid #FF8225; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px;"></div>
+                
+                <!-- Teks Keterangan -->
+                <p style="font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600; color: #ffffff; letter-spacing: 0.5px; margin: 0;">Memuat Data & Grafik...</p>
+                <p style="font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 400; color: #94a3b8; margin-top: 6px;">Menghubungkan ke Google Spreadsheet...</p>
+            </div>
+            
+            <style>
+                @keyframes spin { 
+                    0% { transform: rotate(0deg); } 
+                    100% { transform: rotate(360deg); } 
+                }
+                @keyframes pulseLogo { 
+                    0% { transform: scale(1); opacity: 0.85; } 
+                    50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 15px rgba(255, 130, 37, 0.4)); } 
+                    100% { transform: scale(1); opacity: 0.85; } 
+                }
+            </style>
+        `;
+        document.body.appendChild(loadingOverlay);
+    } else {
+        loadingOverlay.style.display = 'flex';
+        loadingOverlay.style.opacity = '1';
+    }
+
     // Mengambil data secara otomatis dari Google Apps Script (Live Spreadsheet)
     fetch(WEB_APP_URL)
         .then(response => {
@@ -56,13 +96,11 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             console.log("Data berhasil dimuat dari Spreadsheet:", data);
             
-            // Menggabungkan data dari Sheet KOMENTAR dan DATA MENTAH DM
             let rawKomentar = data.komentar || [];
             let rawDm = data.dm || [];
 
             let formattedData = [];
 
-            // Parsing Sheet Komentar
             if (rawKomentar.length > 1) {
                 let headersKomentar = rawKomentar[0];
                 for (let i = 1; i < rawKomentar.length; i++) {
@@ -74,7 +112,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
 
-            // Parsing Sheet DM
             if (rawDm.length > 1) {
                 let headersDm = rawDm[0];
                 for (let i = 1; i < rawDm.length; i++) {
@@ -88,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             globalDataRows = formattedData; 
             
-            // Set default tanggal otomatis jika input kosong
             if (globalDataRows.length > 0) {
                 let dates = globalDataRows.map(r => r.Tanggal).filter(Boolean).sort();
                 if (dates.length > 0) {
@@ -100,6 +136,16 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => {
             console.error('Terjadi kesalahan saat memuat data:', error);
+            alert("Gagal memuat data dari Spreadsheet.");
+        })
+        .finally(() => {
+            // Sembunyikan animasi loading setelah data selesai dimuat
+            if (loadingOverlay) {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 300);
+            }
         });
 });
 
@@ -290,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// FITUR TAMBAHAN: Otomatis Menyesuaikan Nama & Inisial Akun yang Sedang Login
+// FITUR PROFIL: Menyesuaikan Nama Panjang & Inisial Akun yang Sedang Login
 document.addEventListener("DOMContentLoaded", function() {
     const loggedInUser = localStorage.getItem('userName') || "Achmad Zaenudin";
     const loggedInRole = localStorage.getItem('userRole') || "Corporate Communications";

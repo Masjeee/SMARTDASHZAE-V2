@@ -88,6 +88,18 @@
                 <div><span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: 20px;">Astra Tol Tamer</span></div>
             </div>
         </div>
+
+        <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.85); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.3s ease;">
+            <div style="border: 4px solid #f3f3f3; border-top: 4px solid #FF8225; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: 15px; font-family: 'Epilogue', sans-serif; font-size: 14px; font-weight: 600; color: #173B45;">Memuat Data & Grafik...</p>
+        </div>
+
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
         
         <!-- FILTER PER TAHUN -->
         <div class="multi-filter-container">
