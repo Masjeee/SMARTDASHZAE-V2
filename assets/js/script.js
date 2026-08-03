@@ -57,15 +57,12 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("Data berhasil dimuat dari Spreadsheet:", data);
             
             // Menggabungkan data dari Sheet KOMENTAR dan DATA MENTAH DM
-            // Sesuaikan struktur indeks kolom dengan sheet kamu
             let rawKomentar = data.komentar || [];
             let rawDm = data.dm || [];
 
-            // Mengubah format baris spreadsheet (array) menjadi array of objects agar mudah dibaca
-            // Asumsi baris pertama adalah Header (Judul Kolom)
             let formattedData = [];
 
-            // Parsing Sheet Komentar (Contoh)
+            // Parsing Sheet Komentar
             if (rawKomentar.length > 1) {
                 let headersKomentar = rawKomentar[0];
                 for (let i = 1; i < rawKomentar.length; i++) {
@@ -77,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
 
-            // Parsing Sheet DM (Jika ingin digabung)
+            // Parsing Sheet DM
             if (rawDm.length > 1) {
                 let headersDm = rawDm[0];
                 for (let i = 1; i < rawDm.length; i++) {
@@ -117,11 +114,11 @@ function initCharts() {
                 data: [], 
                 borderColor: '#FF8225',          
                 backgroundColor: 'rgba(180, 63, 63, 0.15)',
-                borderWidth: 2.5,                         
-                fill: true,                               
-                tension: 0.4,                             
-                pointRadius: 0,                           
-                pointHoverRadius: 6                       
+                borderWidth: 2.5,                        
+                fill: true,                              
+                tension: 0.4,                            
+                pointRadius: 0,                          
+                pointHoverRadius: 6                     
             }] 
         },
         options: { 
@@ -143,7 +140,7 @@ function initCharts() {
             datasets: [{ 
                 data: [0, 0, 0], 
                 backgroundColor: ['#F8EDED', '#FF8225', '#B43F3F'],
-                borderWidth: 0,          
+                borderWidth: 0,         
                 borderColor: '#ffffff'   
             }] 
         },
@@ -167,7 +164,7 @@ function initCharts() {
             datasets: [{ 
                 data: [0, 0, 0], 
                 backgroundColor: ['#F8EDED', '#FF8225', '#B43F3F'],
-                borderWidth: 0,          
+                borderWidth: 0,         
                 borderColor: '#ffffff'   
             }] 
         },
@@ -248,7 +245,6 @@ function updateDashboardUI(rows) {
     rows.forEach(r => {
         let tgl = r["Tanggal"];
         if (tgl) {
-            // Tambahkan .substring(0, 10) di sini agar format ISO terpotong jadi YYYY-MM-DD
             let cleanDate = tgl.toString().substring(0, 10);
             dateCounts[cleanDate] = (dateCounts[cleanDate] || 0) + 1;
         }
@@ -269,7 +265,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeBtn = document.getElementById("sidebar-close");
     const overlay = document.getElementById("sidebar-overlay");
 
-    // Fungsi Buka/Tutup Sidebar
     function toggleSidebar() {
         document.body.classList.toggle("sidebar-collapsed");
         if (document.body.classList.contains("sidebar-collapsed")) {
@@ -279,13 +274,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Klik tombol hamburger di header
     if (toggleBtn) toggleBtn.addEventListener("click", toggleSidebar);
-
-    // Klik tombol "X" di dalam sidebar
     if (closeBtn) closeBtn.addEventListener("click", toggleSidebar);
-
-    // Klik area luar / overlay gelap
     if (overlay) overlay.addEventListener("click", toggleSidebar);
 });
 
@@ -295,8 +285,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     logos.forEach(img => {
         if (isDark) {
-            // Ubah ke path logo putih jika ada
             img.src = img.src.replace('assets/icons/SmartDash Panjang.svg', 'assets/icons/ SmartDash Putih.svg'); 
         }
     });
+});
+
+// FITUR TAMBAHAN: Otomatis Menyesuaikan Nama & Inisial Akun yang Sedang Login
+document.addEventListener("DOMContentLoaded", function() {
+    const loggedInUser = localStorage.getItem('userName') || "Achmad Zaenudin";
+    const loggedInRole = localStorage.getItem('userRole') || "Corporate Communications";
+
+    const nameEl = document.getElementById('user-name');
+    const roleEl = document.getElementById('user-role');
+    const avatarEl = document.getElementById('user-avatar');
+
+    if (nameEl) nameEl.innerText = loggedInUser;
+    if (roleEl) roleEl.innerText = loggedInRole;
+
+    if (avatarEl) {
+        let initials = loggedInUser
+            .split(' ')
+            .map(n => n[0])
+            .join('')
+            .substring(0, 2)
+            .toUpperCase();
+        avatarEl.innerText = initials;
+    }
 });

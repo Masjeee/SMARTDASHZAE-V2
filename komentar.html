@@ -172,13 +172,13 @@
                 <div class="menu-label">Application</div>
                 <div class="menu-list">
                     <a href="dashboard.html" class="menu-item">
-                        <img src="assets/icons/Dashboard.svg" alt="Dashboard" class="menu-icon"> Dashboard
-                    </a>
-                    <a href="#" class="menu-item" id="toggleTimeline">
-                        <img src="assets/icons/calendar.svg" alt="Timeline" class="menu-icon"> Timeline & Log
+                        <img src="assets/icons/Overview.svg" alt="Overview" class="menu-icon"> Overview
                     </a>
                     <a href="performance.html" class="menu-item">
                         <img src="assets/icons/Dashboard.svg" alt="Performance Konten" class="menu-icon"> Performance Konten
+                    </a>
+                    <a href="#" class="menu-item" id="toggleTimeline">
+                        <img src="assets/icons/calendar.svg" alt="Timeline" class="menu-icon"> Timeline
                     </a>
                     <!-- Submenu Filter Tanggal -->
                     <div class="submenu-container" id="timelineSubmenu">
@@ -222,15 +222,18 @@
         <!-- Profil & Logout -->
         <div class="sidebar-footer">
             <div class="user-profile">
-                <div class="user-avatar">ZA</div>
+                <!-- Tambahkan id="user-avatar" -->
+                <div class="user-avatar" id="user-avatar">ZA</div>
                 <div class="user-info">
-                    <span class="user-name">Achmad Zaenudin</span>
-                    <span class="user-role">Corporate Communications</span>
+                    <!-- Tambahkan id="user-name" -->
+                    <span class="user-name" id="user-name">Achmad Zaenudin</span>
+                    <!-- Tambahkan id="user-role" -->
+                    <span class="user-role" id="user-role">Corporate Communications</span>
                 </div>
             </div>
             <a href="index.html" class="logout-btn">Keluar (Logout)</a>
         </div>
-    </aside>
+        </aside>
 
     <!-- KONTEN UTAMA -->
     <main class="main-content">

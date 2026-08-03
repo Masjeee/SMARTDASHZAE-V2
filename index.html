@@ -168,46 +168,55 @@
         </div>
     </div>
 
-<script>
+    <script>
     // Cek Dark Mode
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
     }
 
-    // Skrip Validasi Login Sinkron Spreadsheet (AKUN_ADMIN)
     document.getElementById("loginForm").addEventListener("submit", function (e) {
         e.preventDefault();
-        const usernameInput = document.getElementById("username").value.trim();
+        const usernameInput = document.getElementById("username").value.trim().toLowerCase();
         const passwordInput = document.getElementById("password").value.trim();
 
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                const users = data.akun_admin || [
-                    { username: "Zae", password: "123" },
-                    { username: "Hannah", password: "123" },
-                    { username: "May", password: "123" }
-                ];
+        const submitBtn = document.querySelector(".login-btn");
+        submitBtn.innerText = "Memverifikasi...";
+        submitBtn.disabled = true;
 
-                const matchedUser = users.find(u => u.username.toLowerCase() === usernameInput.toLowerCase() && String(u.password) === passwordInput);
+        // Daftar database profil lengkap berdasarkan ID/Username singkat
+        const daftarAkun = {
+            "zae": { 
+                namaLengkap: "Achmad Zaenudin", 
+                role: "Corporate Communications" 
+            },
+            "hannah": { 
+                namaLengkap: "Hannah Afini", 
+                role: "Corporate Communications" 
+            },
+            "may": { 
+                namaLengkap: "Mayrani Ulinimashasti", 
+                role: "Corporate Communications" 
+            }
+        };
 
-                if (matchedUser) {
-                    localStorage.setItem("isLoggedIn", "true");
-                    localStorage.setItem("username", matchedUser.username);
-                    window.location.href = "dashboard.html";
-                } else {
-                    alert("Username atau Password salah!");
-                }
-            })
-            .catch(error => {
-                // Fallback jika file json offline
-                if (usernameInput.toUpperCase() === "ZAE") {
-                    localStorage.setItem("isLoggedIn", "true");
-                    window.location.href = "dashboard.html";
-                } else {
-                    alert("Gagal memuat data autentikasi.");
-                }
-            });
+        // Cek apakah username dan password valid
+        let akunValid = daftarAkun[usernameInput] && passwordInput === "123"; // Sesuaikan password jika berbeda
+
+        if (akunValid) {
+            let dataUser = daftarAkun[usernameInput];
+
+            // Simpan data lengkap ke localStorage
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userName", dataUser.namaLengkap); // Menyimpan nama PANJANG
+            localStorage.setItem("userRole", dataUser.role);     // Menyimpan jabatan sesuai akun
+
+            // Langsung masuk ke dashboard
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Username atau Password salah!");
+            submitBtn.innerText = "Masuk Dashboard";
+            submitBtn.disabled = false;
+        }
     });
 </script>
 </body>
