@@ -303,26 +303,36 @@
                 type: 'bar',
                 data: {
                     labels: ['2024', '2025', '2026'],
-                    datasets: [{
-                        label: 'Jumlah Keluhan',
-                        data: [0, 0, 0],
-                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
-                        borderColor: 'rgba(59, 130, 246, 1)',
-                        borderWidth: 2,
-                        borderRadius: 6,
-                        yAxisID: 'y'
-                    }, {
-                        label: 'Rata-Rata SLA (Jam)',
-                        data: [0, 0, 0],
-                        type: 'line',
-                        borderColor: '#FF8225',
-                        backgroundColor: 'rgba(255, 130, 37, 0.1)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#FF8225',
-                        pointRadius: 5,
-                        tension: 0.2,
-                        yAxisID: 'y1'
-                    }]
+                        labels: ['2024', '2025', '2026'],
+                            labels: ['2024', '2025', '2026'],
+                                datasets: [{
+                                    label: 'Jumlah Keluhan',
+                                    data: [0, 0, 0],
+                                    backgroundColor: [
+                                        '#F8EDED',  // 2024: Putih (#F8EDED)
+                                        '#F8EDED',  // 2025: Orange (#FF8225)
+                                        '#F8EDED'   // 2026: Merah (#B43F3F)
+                                    ],
+                                    borderColor: [
+                                        '#F8EDED',  // Border tipis untuk batang putih agar kontras
+                                        '#F8EDED',  
+                                        '#F8EDED'   
+                                    ],
+                                    borderWidth: 0,
+                                    borderRadius: 50,
+                                    yAxisID: 'y'
+                                }, {
+                                    label: 'Rata-Rata SLA (Jam)',
+                                    data: [0, 0, 0],
+                                    type: 'line',
+                                    borderColor: '#FF8225',
+                                    backgroundColor: 'rgba(255, 130, 37, 0.1)',
+                                    borderWidth: 3,
+                                    pointBackgroundColor: '#FF8225',
+                                    pointRadius: 5,
+                                    tension: 0.2,
+                                    yAxisID: 'y1'
+                                }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
