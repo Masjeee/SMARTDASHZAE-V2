@@ -45,46 +45,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // Inisialisasi Grafik Chart.js
     initCharts();
 
-    // --- FITUR LOADING OVERLAY OTOMATIS ---
-    // --- CUSTOM LOADING OVERLAY ---
-    // --- CUSTOM LOADING OVERLAY DENGAN LOGO SMARTDASH ---
-    let loadingOverlay = document.getElementById('loading-overlay');
-    if (!loadingOverlay) {
-        loadingOverlay = document.createElement('div');
-        loadingOverlay.id = 'loading-overlay';
-        loadingOverlay.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.4s ease;";
-        
-        loadingOverlay.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <!-- Logo SmartDash dengan Animasi Berdenyut (Pulse) -->
-                <img src="assets/icons/SmartDash Panjang.svg" alt="SmartDash Logo" style="width: 220px; height: auto; margin-bottom: 24px; animation: pulseLogo 1.5s ease-in-out infinite;">
-                
-                <!-- Lingkaran Spinner Modern -->
-                <div style="width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.15); border-top: 3px solid #FF8225; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px;"></div>
-                
-                <!-- Teks Keterangan -->
-                <p style="font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 600; color: #ffffff; letter-spacing: 0.5px; margin: 0;">Memuat Data & Grafik...</p>
-                <p style="font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 400; color: #94a3b8; margin-top: 6px;">Menghubungkan ke Google Spreadsheet...</p>
-            </div>
-            
-            <style>
-                @keyframes spin { 
-                    0% { transform: rotate(0deg); } 
-                    100% { transform: rotate(360deg); } 
-                }
-                @keyframes pulseLogo { 
-                    0% { transform: scale(1); opacity: 0.85; } 
-                    50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 15px rgba(255, 130, 37, 0.4)); } 
-                    100% { transform: scale(1); opacity: 0.85; } 
-                }
-            </style>
-        `;
-        document.body.appendChild(loadingOverlay);
-    } else {
-        loadingOverlay.style.display = 'flex';
-        loadingOverlay.style.opacity = '1';
-    }
-
     // Mengambil data secara otomatis dari Google Apps Script (Live Spreadsheet)
     fetch(WEB_APP_URL)
         .then(response => {
@@ -139,7 +99,8 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Gagal memuat data dari Spreadsheet.");
         })
         .finally(() => {
-            // Sembunyikan animasi loading setelah data selesai dimuat
+            // Sembunyikan loading overlay yang ada di HTML setelah data selesai dimuat
+            const loadingOverlay = document.getElementById('loading-overlay');
             if (loadingOverlay) {
                 loadingOverlay.style.opacity = '0';
                 setTimeout(() => {
