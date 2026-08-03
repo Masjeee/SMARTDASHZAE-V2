@@ -31,6 +31,7 @@
         table th { font-size: 12px !important; font-weight: 700 !important; color: #173B45 !important; padding: 10px !important; }
         table td { font-size: 13px !important; color: #334155 !important; padding: 10px !important; }
         .year-section-title { background: #173B45; color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 700; margin: 25px 0 15px 0; }
+        .table-year-badge { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -89,21 +90,21 @@
                     <h4>Periode Tahun 2024</h4>
                     <div class="filter-inputs-flex">
                         <div class="filter-group"><label>Dari Tanggal</label><input type="date" id="start2024" value="2024-01-01"></div>
-                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2024" value="2024-04-30"></div>
+                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2024" value="2024-12-31"></div>
                     </div>
                 </div>
                 <div class="year-filter-card">
                     <h4>Periode Tahun 2025</h4>
                     <div class="filter-inputs-flex">
                         <div class="filter-group"><label>Dari Tanggal</label><input type="date" id="start2025" value="2025-01-01"></div>
-                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2025" value="2025-04-30"></div>
+                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2025" value="2025-12-31"></div>
                     </div>
                 </div>
                 <div class="year-filter-card">
                     <h4>Periode Tahun 2026</h4>
                     <div class="filter-inputs-flex">
                         <div class="filter-group"><label>Dari Tanggal</label><input type="date" id="start2026" value="2026-01-01"></div>
-                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2026" value="2026-04-30"></div>
+                        <div class="filter-group"><label>Sampai Tanggal</label><input type="date" id="end2026" value="2026-12-31"></div>
                     </div>
                 </div>
             </div>
@@ -121,12 +122,13 @@
 
         <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px;">
             <div class="stat-card"><h3>TOTAL KELUHAN KESELURUHAN</h3><div class="value" id="val-total-keluhan" style="color: #2563eb;">0</div></div>
-            <div class="stat-card"><h3>STATUS DASHBOARD</h3><div class="value" style="font-size: 16px !important; color: #16a34a; display: flex; align-items: center; gap: 8px; margin-top: 4px;"><span style="width: 10px; height: 10px; background-color: #16a34a; border-radius: 50%; display: inline-block;"></span> 3 Kategori Utama</div></div>
+            <div class="stat-card"><h3>RATA-RATA SLA KESELURUHAN</h3><div class="value" id="val-avg-sla-all" style="color: #10B981;">0 Jam</div></div>
         </div>
 
-        <!-- GRAFIK UTAMA: COMBO CHART -->
+        <!-- GRAFIK KOMPARASI UTAMA (COMBO CHART DENGAN LINE SLA) -->
         <div class="chart-card" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
-            <h3 style="font-size: 15px; font-weight: 700; color: #173B45; margin-bottom: 15px;">Komparasi Volume Keluhan & Tren SLA Antar Tahun</h3>
+            <h3 style="font-size: 15px; font-weight: 700; color: #173B45; margin-bottom: 5px;">Komparasi Volume Keluhan & Tren SLA Antar Tahun</h3>
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">Grafik batang menunjukkan jumlah keluhan, sedangkan grafik garis menunjukkan rata-rata durasi respon (SLA) dalam jam.</p>
             <div class="chart-container" style="position: relative; height: 320px;"><canvas id="comboChart"></canvas></div>
         </div>
 
@@ -170,11 +172,12 @@
         </div>
 
         <!-- TABEL RINCIAN -->
-        <div class="section-title">Tabel Rincian Respon & Klasifikasi Otomatis (Sampel 10 Representatif)</div>
+        <div class="section-title">Tabel Rincian Sampel Pesan Representatif (Masing-Masing 10 Sampel per Tahun: 2024, 2025, 2026)</div>
         <div class="stat-card" style="padding: 20px; overflow-x: auto;">
             <table width="100%" id="table-sla-pesan" border="0" cellpadding="10" cellspacing="0">
                 <thead>
                     <tr style="text-align: left; border-bottom: 2px solid #e2e8f0; color: #173B45;">
+                        <th>TAHUN</th>
                         <th>TANGGAL</th>
                         <th>PENGIRIM</th>
                         <th>ISI PESAN</th>
@@ -184,7 +187,7 @@
                         <th>TONALITY</th>
                     </tr>
                 </thead>
-                <tbody><tr><td colspan="7" style="text-align: center;">Memuat data CSV...</td></tr></tbody>
+                <tbody><tr><td colspan="8" style="text-align: center;">Memuat data CSV...</td></tr></tbody>
             </table>
         </div>
     </main>
@@ -236,12 +239,10 @@
                         let pengirim = String(rowObj["Nama Pengirim"] || rowObj["Pengirim"] || "").trim();
                         if (pengirim.toLowerCase().includes("astra tol tamer")) continue;
 
-                        // Pembatasan Kategori HANYA: Lalu Lintas, Struk Digital, Fasilitas
                         let rawKat = String(rowObj["Kategori"] || "").trim().toLowerCase();
                         let pesan = String(rowObj["Isi Pesan Keluhan"] || rowObj["Isi Pesan"] || "").toLowerCase();
                         
-                        let kategori = "Fasilitas"; // Default fallback
-
+                        let kategori = "Fasilitas";
                         if (rawKat.includes("lalu lintas") || rawKat.includes("lalin") || pesan.match(/macet|padat|lalin|jalan|lalu lintas|tol|kendaraan|mobil/)) {
                             kategori = "Lalu Lintas";
                         } else if (rawKat.includes("struk") || rawKat.includes("digital") || pesan.match(/saldo|etoll|e-toll|kartu|struk|topup|top up|rfid|flo|pembayaran|transaksi/)) {
@@ -286,18 +287,21 @@
                     datasets: [{
                         label: 'Jumlah Keluhan',
                         data: [0, 0, 0],
-                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
                         borderColor: 'rgba(59, 130, 246, 1)',
                         borderWidth: 2,
+                        borderRadius: 6,
                         yAxisID: 'y'
                     }, {
                         label: 'Rata-Rata SLA (Jam)',
                         data: [0, 0, 0],
                         type: 'line',
-                        borderColor: '#10B981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: '#FF8225',
+                        backgroundColor: 'rgba(255, 130, 37, 0.1)',
                         borderWidth: 3,
-                        tension: 0.1,
+                        pointBackgroundColor: '#FF8225',
+                        pointRadius: 5,
+                        tension: 0.2,
                         yAxisID: 'y1'
                     }]
                 },
@@ -305,8 +309,8 @@
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
                     scales: {
-                        y: { type: 'linear', position: 'left', title: { display: true, text: 'Jumlah Keluhan' }, grid: { display: true, color: '#f1f5f9' } },
-                        y1: { type: 'linear', position: 'right', title: { display: true, text: 'SLA (Jam)' }, grid: { drawOnChartArea: false } }
+                        y: { type: 'linear', position: 'left', title: { display: true, text: 'Jumlah Keluhan (Kasus)' }, grid: { display: true, color: '#f1f5f9' } },
+                        y1: { type: 'linear', position: 'right', title: { display: true, text: 'Rata-Rata SLA (Jam)' }, grid: { drawOnChartArea: false } }
                     }
                 }
             });
@@ -401,6 +405,14 @@
             let allRows = [...statsPerYear["2024"].rows, ...statsPerYear["2025"].rows, ...statsPerYear["2026"].rows];
             document.getElementById('val-total-keluhan').innerText = allRows.length;
 
+            let totalAllSec = 0, totalAllValid = 0;
+            ["2024", "2025", "2026"].forEach(y => {
+                totalAllSec += statsPerYear[y].totalSec;
+                totalAllValid += statsPerYear[y].validCount;
+            });
+            let avgAllHours = totalAllValid > 0 ? (totalAllSec / totalAllValid / 3600).toFixed(2) : 0;
+            document.getElementById('val-avg-sla-all').innerText = avgAllHours + " Jam";
+
             let totalLalin = 0, totalFasilitas = 0, totalStruk = 0;
             allRows.forEach(r => {
                 let cat = r["Auto_Kategori"];
@@ -460,15 +472,21 @@
                 }
             });
 
-            let sampledRows = allRows.slice(0, 10);
+            // Ambil sampel proporsional: 10 dari 2024, 10 dari 2025, 10 dari 2026
+            let sample2024 = statsPerYear["2024"].rows.slice(0, 10).map(r => ({ ...r, _tahunRow: "2024" }));
+            let sample2025 = statsPerYear["2025"].rows.slice(0, 10).map(r => ({ ...r, _tahunRow: "2025" }));
+            let sample2026 = statsPerYear["2026"].rows.slice(0, 10).map(r => ({ ...r, _tahunRow: "2026" }));
+            let combinedSamples = [...sample2024, ...sample2025, ...sample2026];
+
             let tbody = document.querySelector("#table-sla-pesan tbody");
             if (tbody) {
                 tbody.innerHTML = "";
-                if (sampledRows.length > 0) {
-                    sampledRows.forEach(row => {
+                if (combinedSamples.length > 0) {
+                    combinedSamples.forEach(row => {
                         let tr = document.createElement("tr");
                         tr.style.borderBottom = "1px solid #f1f5f9";
                         tr.innerHTML = `
+                            <td><span class="table-year-badge">${row._tahunRow}</span></td>
                             <td>${row["Tanggal"] ? String(row["Tanggal"]).substring(0, 10) : ''}</td>
                             <td>${row["Nama Pengirim"] || row["Pengirim"] || '-'}</td>
                             <td>${row["Isi Pesan Keluhan"] || row["Isi Pesan"] || '-'}</td>
@@ -480,7 +498,7 @@
                         tbody.appendChild(tr);
                     });
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">Tidak ada data untuk rentang tanggal tersebut.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center;">Tidak ada data sampel untuk rentang tanggal tersebut.</td></tr>`;
                 }
             }
         }
