@@ -159,32 +159,9 @@
 
         <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <!-- Gambar Pertama dari PNG Sequence -->
-            <img id="smartdash-animation" src="assets/animations/SMARTDASH_00000.png" alt="Loading SmartDash..." style="width: 240px; height: auto;">
+            <img src="assets/icons/SMARTDASH.gif" alt="Loading SmartDash..." style="width: 120px; height: auto;">
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const imgElement = document.getElementById('smartdash-animation');
-            if (imgElement) {
-                let currentFrame = 0;
-                const totalFrames = 209; // 00000 sampai 00209 (Total 210 frame)
-
-                // Memutar animasi PNG sequence (kecepatan ~30 fps)
-                setInterval(() => {
-                    currentFrame++;
-                    if (currentFrame > totalFrames) {
-                        currentFrame = 0; // Ulang animasi dari awal (looping)
-                    }
-                    
-                    // Format nomor file 5 digit (contoh: SMARTDASH_00015.png)
-                    let paddedNumber = String(currentFrame).padStart(5, '0');
-                    imgElement.src = `assets/animations/SMARTDASH_${paddedNumber}.png`;
-                }, 33);
-            }
-        });
-    </script>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -412,7 +389,16 @@
                             }
                         }
                     })
-                    .catch(err => console.error("Gagal memuat data komentar:", err));
+                    .catch(err => console.error("Gagal memuat data pesan:", err))
+                    .finally(() => {
+                        const loadingOverlay = document.getElementById('loading-overlay');
+                        if (loadingOverlay) {
+                            loadingOverlay.style.opacity = '0';
+                            setTimeout(() => {
+                                loadingOverlay.style.display = 'none';
+                            }, 400);
+                        }
+                    });
             });
 
             function initChartsKomentar() {

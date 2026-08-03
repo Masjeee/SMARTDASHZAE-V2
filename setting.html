@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css"> 
     
-    
     <style>
         .submenu-container {
             max-height: 0 !important;
@@ -83,7 +82,6 @@
             background-color: #e06d1c !important;
         }
 
-        /* Sembunyikan tombol close (X) di sidebar desktop */
         .sidebar-close-btn {
             display: none !important;
         }
@@ -97,52 +95,27 @@
         .top-bar {
             position: sticky !important;
             top: 0 !important;
-            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            background-color: #f8fafc !important;
             z-index: 100 !important;
             padding-top: 20px !important;
             padding-bottom: 15px !important;
             margin-bottom: 20px !important;
-            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
         html.dark-mode .top-bar, body.dark-mode .top-bar {
             background-color: #0f172a !important;
             border-bottom: 1px solid #1e293b !important;
         }
-        
     </style>
 </head>
 <body>
 
-        <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
+    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <!-- Gambar Pertama dari PNG Sequence -->
-            <img id="smartdash-animation" src="assets/animations/SMARTDASH_00000.png" alt="Loading SmartDash..." style="width: 240px; height: auto;">
+            <img src="assets/icons/SMARTDASH.gif" alt="Loading SmartDash..." style="width: 120px; height: auto;">
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const imgElement = document.getElementById('smartdash-animation');
-            if (imgElement) {
-                let currentFrame = 0;
-                const totalFrames = 209; // 00000 sampai 00209 (Total 210 frame)
-
-                // Memutar animasi PNG sequence (kecepatan ~30 fps)
-                setInterval(() => {
-                    currentFrame++;
-                    if (currentFrame > totalFrames) {
-                        currentFrame = 0; // Ulang animasi dari awal (looping)
-                    }
-                    
-                    // Format nomor file 5 digit (contoh: SMARTDASH_00015.png)
-                    let paddedNumber = String(currentFrame).padStart(5, '0');
-                    imgElement.src = `assets/animations/SMARTDASH_${paddedNumber}.png`;
-                }, 33);
-            }
-        });
-    </script>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -193,18 +166,15 @@
 
         <div class="sidebar-footer">
             <div class="user-profile">
-                <!-- Tambahkan id="user-avatar" -->
                 <div class="user-avatar" id="user-avatar">ZA</div>
                 <div class="user-info">
-                    <!-- Tambahkan id="user-name" -->
                     <span class="user-name" id="user-name">Achmad Zaenudin</span>
-                    <!-- Tambahkan id="user-role" -->
                     <span class="user-role" id="user-role">Corporate Communications</span>
                 </div>
             </div>
             <a href="index.html" class="logout-btn">Keluar (Logout)</a>
         </div>
-        </aside>
+    </aside>
 
     <!-- KONTEN UTAMA -->
     <main class="main-content">
@@ -233,11 +203,9 @@
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
     <script>
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark-mode');
-        }
         // Cek Preferensi Tema & Sidebar dari LocalStorage saat halaman dimuat
         if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark-mode');
             document.body.classList.add('dark-mode');
         }
         if (localStorage.getItem('sidebar') === 'collapsed') {
@@ -276,6 +244,17 @@
 
             if (overlay) {
                 overlay.addEventListener("click", closeSidebar);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sembunyikan loading overlay setelah halaman selesai dimuat
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 400);
             }
         });
 

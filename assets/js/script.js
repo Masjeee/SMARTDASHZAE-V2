@@ -6,26 +6,32 @@ let sentimentChartInstance = null;
 // GANTI URL DI BAWAH INI DENGAN WEB APP URL DARI GOOGLE APPS SCRIPT KAMU
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
 
-document.addEventListener('DOMContentLoaded', () => {
+// --- SEMUA INISIALISASI UTAMA DIJADIKAN SATU DI SINI ---
+document.addEventListener("DOMContentLoaded", function () {
+    
+    // 1. Inisialisasi Sidebar Toggle & State
     const toggleBtn = document.getElementById('sidebar-toggle');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('sidebar-collapsed');
-            
-            if (document.body.classList.contains('sidebar-collapsed')) {
-                localStorage.setItem('sidebar', 'collapsed');
-            } else {
-                localStorage.setItem('sidebar', 'expanded');
-            }
-        });
+    const closeBtn = document.getElementById("sidebar-close");
+    const overlay = document.getElementById("sidebar-overlay");
+    
+    function toggleSidebar() {
+        document.body.classList.toggle('sidebar-collapsed');
+        if (document.body.classList.contains('sidebar-collapsed')) {
+            localStorage.setItem('sidebar', 'collapsed');
+        } else {
+            localStorage.setItem('sidebar', 'expanded');
+        }
     }
+
+    if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    if (closeBtn) closeBtn.addEventListener("click", toggleSidebar);
+    if (overlay) overlay.addEventListener("click", toggleSidebar);
 
     if (localStorage.getItem('sidebar') === 'collapsed') {
         document.body.classList.add('sidebar-collapsed');
     }
-});
 
-document.addEventListener("DOMContentLoaded", function() {
+    // 2. Inisialisasi Timeline Submenu
     const toggleTimeline = document.getElementById('toggleTimeline');
     if (toggleTimeline) {
         toggleTimeline.addEventListener('click', function(e) {
@@ -37,15 +43,46 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    // 3. Inisialisasi Filter Tanggal
     const applyFilterBtn = document.getElementById('applyFilterBtn');
     if (applyFilterBtn) {
         applyFilterBtn.addEventListener('click', terapkanFilterTanggal);
     }
 
-    // Inisialisasi Grafik Chart.js
+    // 4. Inisialisasi Profil Pengguna
+    const loggedInUser = localStorage.getItem('userName') || "Achmad Zaenudin";
+    const loggedInRole = localStorage.getItem('userRole') || "Corporate Communications";
+
+    const nameEl = document.getElementById('user-name');
+    const roleEl = document.getElementById('user-role');
+    const avatarEl = document.getElementById('user-avatar');
+
+    if (nameEl) nameEl.innerText = loggedInUser;
+    if (roleEl) roleEl.innerText = loggedInRole;
+
+    if (avatarEl) {
+        let initials = loggedInUser
+            .split(' ')
+            .map(n => n[0])
+            .join('')
+            .substring(0, 2)
+            .toUpperCase();
+        avatarEl.innerText = initials;
+    }
+
+    // 5. Inisialisasi Tema Logo (Dark/Light mode check)
+    const logos = document.querySelectorAll('.brand-logo, .main-logo-container img');
+    const isDark = document.body.classList.contains('dark-mode');
+    logos.forEach(img => {
+        if (isDark) {
+            img.src = img.src.replace('assets/icons/SmartDash Panjang.svg', 'assets/icons/ SmartDash Putih.svg'); 
+        }
+    });
+
+    // 6. Inisialisasi Grafik Chart.js
     initCharts();
 
-    // Mengambil data secara otomatis dari Google Apps Script (Live Spreadsheet)
+    // 7. Mengambil Data dari Google Apps Script (Live Spreadsheet)
     fetch(WEB_APP_URL)
         .then(response => {
             if (!response.ok) {
@@ -56,28 +93,16 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             console.log("Data berhasil dimuat dari Spreadsheet:", data);
             
-            let rawKomentar = data.komentar || [];
-            let rawDm = data.dm || [];
-
+            // Sesuaikan properti 'performance' dengan backend doGet Apps Script kamu
+            let rawData = data.performance || data.komentar || [];
             let formattedData = [];
 
-            if (rawKomentar.length > 1) {
-                let headersKomentar = rawKomentar[0];
-                for (let i = 1; i < rawKomentar.length; i++) {
+            if (rawData.length > 1) {
+                let headers = rawData[0];
+                for (let i = 1; i < rawData.length; i++) {
                     let rowObj = {};
-                    headersKomentar.forEach((header, index) => {
-                        rowObj[header] = rawKomentar[i][index];
-                    });
-                    formattedData.push(rowObj);
-                }
-            }
-
-            if (rawDm.length > 1) {
-                let headersDm = rawDm[0];
-                for (let i = 1; i < rawDm.length; i++) {
-                    let rowObj = {};
-                    headersDm.forEach((header, index) => {
-                        rowObj[header] = rawDm[i][index];
+                    headers.forEach((header, index) => {
+                        rowObj[header] = rawData[i][index];
                     });
                     formattedData.push(rowObj);
                 }
@@ -99,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Gagal memuat data dari Spreadsheet.");
         })
         .finally(() => {
-            // Sembunyikan loading overlay yang ada di HTML setelah data selesai dimuat
+            // Sembunyikan loading overlay setelah selesai
             const loadingOverlay = document.getElementById('loading-overlay');
             if (loadingOverlay) {
                 loadingOverlay.style.opacity = '0';
@@ -109,6 +134,8 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 });
+
+// --- FUNGSI PENDUKUNG (CHARTS & FILTER) ---
 
 function initCharts() {
     const ctxLine = document.getElementById('lineChart').getContext('2d');
@@ -121,11 +148,11 @@ function initCharts() {
                 data: [], 
                 borderColor: '#FF8225',          
                 backgroundColor: 'rgba(180, 63, 63, 0.15)',
-                borderWidth: 2.5,                        
-                fill: true,                              
-                tension: 0.4,                            
-                pointRadius: 0,                          
-                pointHoverRadius: 6                     
+                borderWidth: 2.5,                     
+                fill: true,                          
+                tension: 0.4,                         
+                pointRadius: 0,                       
+                pointHoverRadius: 6                  
             }] 
         },
         options: { 
@@ -147,7 +174,7 @@ function initCharts() {
             datasets: [{ 
                 data: [0, 0, 0], 
                 backgroundColor: ['#F8EDED', '#FF8225', '#B43F3F'],
-                borderWidth: 0,         
+                borderWidth: 0,        
                 borderColor: '#ffffff'   
             }] 
         },
@@ -171,7 +198,7 @@ function initCharts() {
             datasets: [{ 
                 data: [0, 0, 0], 
                 backgroundColor: ['#F8EDED', '#FF8225', '#B43F3F'],
-                borderWidth: 0,         
+                borderWidth: 0,        
                 borderColor: '#ffffff'   
             }] 
         },
@@ -266,56 +293,3 @@ function updateDashboardUI(rows) {
         lineChartInstance.update();
     }
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById("sidebar-toggle");
-    const closeBtn = document.getElementById("sidebar-close");
-    const overlay = document.getElementById("sidebar-overlay");
-
-    function toggleSidebar() {
-        document.body.classList.toggle("sidebar-collapsed");
-        if (document.body.classList.contains("sidebar-collapsed")) {
-            localStorage.setItem('sidebar', 'collapsed');
-        } else {
-            localStorage.setItem('sidebar', 'expanded');
-        }
-    }
-
-    if (toggleBtn) toggleBtn.addEventListener("click", toggleSidebar);
-    if (closeBtn) closeBtn.addEventListener("click", toggleSidebar);
-    if (overlay) overlay.addEventListener("click", toggleSidebar);
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const logos = document.querySelectorAll('.brand-logo, .main-logo-container img');
-    const isDark = document.body.classList.contains('dark-mode');
-
-    logos.forEach(img => {
-        if (isDark) {
-            img.src = img.src.replace('assets/icons/SmartDash Panjang.svg', 'assets/icons/ SmartDash Putih.svg'); 
-        }
-    });
-});
-
-// FITUR PROFIL: Menyesuaikan Nama Panjang & Inisial Akun yang Sedang Login
-document.addEventListener("DOMContentLoaded", function() {
-    const loggedInUser = localStorage.getItem('userName') || "Achmad Zaenudin";
-    const loggedInRole = localStorage.getItem('userRole') || "Corporate Communications";
-
-    const nameEl = document.getElementById('user-name');
-    const roleEl = document.getElementById('user-role');
-    const avatarEl = document.getElementById('user-avatar');
-
-    if (nameEl) nameEl.innerText = loggedInUser;
-    if (roleEl) roleEl.innerText = loggedInRole;
-
-    if (avatarEl) {
-        let initials = loggedInUser
-            .split(' ')
-            .map(n => n[0])
-            .join('')
-            .substring(0, 2)
-            .toUpperCase();
-        avatarEl.innerText = initials;
-    }
-});

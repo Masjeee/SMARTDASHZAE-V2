@@ -92,34 +92,11 @@
 </head>
 <body>
 
-        <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
+    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <!-- Gambar Pertama dari PNG Sequence -->
-            <img id="smartdash-animation" src="assets/animations/SMARTDASH_00000.png" alt="Loading SmartDash..." style="width: 240px; height: auto;">
+            <img src="assets/icons/SMARTDASH.gif" alt="Loading SmartDash..." style="width: 120px; height: auto;">
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const imgElement = document.getElementById('smartdash-animation');
-            if (imgElement) {
-                let currentFrame = 0;
-                const totalFrames = 209; // 00000 sampai 00209 (Total 210 frame)
-
-                // Memutar animasi PNG sequence (kecepatan ~30 fps)
-                setInterval(() => {
-                    currentFrame++;
-                    if (currentFrame > totalFrames) {
-                        currentFrame = 0; // Ulang animasi dari awal (looping)
-                    }
-                    
-                    // Format nomor file 5 digit (contoh: SMARTDASH_00015.png)
-                    let paddedNumber = String(currentFrame).padStart(5, '0');
-                    imgElement.src = `assets/animations/SMARTDASH_${paddedNumber}.png`;
-                }, 33);
-            }
-        });
-    </script>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -140,9 +117,6 @@
                         <img src="assets/icons/Overview.svg" alt="Overview" class="menu-icon"> Overview
                     </a>
                     
-                    
-                    
-                    <!-- Menu Timeline & Log dengan Submenu Filter Tanggal -->
                     <div class="menu-item-group">
                         <a href="performance.html" class="menu-item">
                             <img src="assets/icons/Dashboard.svg" alt="Performance" class="menu-icon"> Performance Konten
@@ -188,18 +162,15 @@
 
         <div class="sidebar-footer">
             <div class="user-profile">
-                <!-- Tambahkan id="user-avatar" -->
                 <div class="user-avatar" id="user-avatar">ZA</div>
                 <div class="user-info">
-                    <!-- Tambahkan id="user-name" -->
                     <span class="user-name" id="user-name">Achmad Zaenudin</span>
-                    <!-- Tambahkan id="user-role" -->
                     <span class="user-role" id="user-role">Corporate Communications</span>
                 </div>
             </div>
             <a href="index.html" class="logout-btn">Keluar (Logout)</a>
         </div>
-        </aside>
+    </aside>
 
     <!-- KONTEN UTAMA -->
     <main class="main-content">
@@ -251,7 +222,6 @@
         let globalCsiData = [];
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Logika Toggle Sidebar & Submenu
             const toggleBtn = document.getElementById("sidebar-toggle");
             const closeBtn = document.getElementById("sidebar-close");
             const overlay = document.getElementById("sidebar-overlay");
@@ -293,7 +263,6 @@
                 });
             }
 
-            // FETCH DATA DARI GOOGLE APPS SCRIPT
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxBf9rJdSJuUb2g9MzocDjP4zXXoldLvNREiybtJk2FGKqjyuQzsAJeBST2xR4B-TaB/exec"; 
 
             fetch(WEB_APP_URL)
@@ -328,9 +297,17 @@
                         { No: "1", Segmen: "0", Awal: "0", Akhir: "0", Jalur: "0", Lajur: "0", Tanggal: "-", Priority: "-" }
                     ];
                     renderTable(globalCsiData);
+                })
+                .finally(() => {
+                    const loadingOverlay = document.getElementById('loading-overlay');
+                    if (loadingOverlay) {
+                        loadingOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                        }, 400);
+                    }
                 });
 
-            // Tombol Filter Tanggal dari Sidebar
             const applyFilterBtn = document.getElementById('applyFilterBtn');
             if (applyFilterBtn) {
                 applyFilterBtn.addEventListener('click', function() {
@@ -355,19 +332,13 @@
             }
         });
 
-        // Fungsi untuk menentukan tingkat Prioritas otomatis berdasarkan kolom Lajur
         function calculatePriority(lajurVal) {
             let l = String(lajurVal || "").trim().toUpperCase();
-            // High: L2 atau L3
             if (l.includes("L2") || l.includes("L3")) {
                 return { text: "High", class: "priority-high" };
-            }
-            // Medium: L1
-            else if (l.includes("L1")) {
+            } else if (l.includes("L1")) {
                 return { text: "Medium", class: "priority-medium" };
-            }
-            // Low: OS atau di luar itu
-            else {
+            } else {
                 return { text: "Low", class: "priority-low" };
             }
         }

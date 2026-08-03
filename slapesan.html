@@ -36,34 +36,12 @@
 </head>
 <body>
 
-        <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
+    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <!-- Gambar Pertama dari PNG Sequence -->
-            <img id="smartdash-animation" src="assets/animations/SMARTDASH_00000.png" alt="Loading SmartDash..." style="width: 240px; height: auto;">
+            <img src="assets/icons/SMARTDASH.gif" alt="Loading SmartDash..." style="width: 120px; height: auto;">
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const imgElement = document.getElementById('smartdash-animation');
-            if (imgElement) {
-                let currentFrame = 0;
-                const totalFrames = 209; // 00000 sampai 00209 (Total 210 frame)
-
-                // Memutar animasi PNG sequence (kecepatan ~30 fps)
-                setInterval(() => {
-                    currentFrame++;
-                    if (currentFrame > totalFrames) {
-                        currentFrame = 0; // Ulang animasi dari awal (looping)
-                    }
-                    
-                    // Format nomor file 5 digit (contoh: SMARTDASH_00015.png)
-                    let paddedNumber = String(currentFrame).padStart(5, '0');
-                    imgElement.src = `assets/animations/SMARTDASH_${paddedNumber}.png`;
-                }, 33);
-            }
-        });
-    </script>
+        
     <aside class="sidebar">
         <div class="sidebar-top">
             <div class="sidebar-header-mobile" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 20px; padding: 0 10px;">
@@ -91,12 +69,9 @@
         </div>
         <div class="sidebar-footer">
             <div class="user-profile">
-                <!-- Tambahkan id="user-avatar" -->
                 <div class="user-avatar" id="user-avatar">ZA</div>
                 <div class="user-info">
-                    <!-- Tambahkan id="user-name" -->
                     <span class="user-name" id="user-name">Achmad Zaenudin</span>
-                    <!-- Tambahkan id="user-role" -->
                     <span class="user-role" id="user-role">Corporate Communications</span>
                 </div>
             </div>
@@ -310,7 +285,16 @@
                     }
                     prosesFilterMultiTahun();
                 })
-                .catch(err => console.error("Gagal memuat file CSV:", err));
+                .catch(err => console.error("Gagal memuat file CSV:", err))
+                .finally(() => {
+                    const loadingOverlay = document.getElementById('loading-overlay');
+                    if (loadingOverlay) {
+                        loadingOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                        }, 400);
+                    }
+                });
         });
 
         function initCharts() {
@@ -507,7 +491,6 @@
                 }
             });
 
-            // Ambil sampel proporsional: 10 dari 2024, 10 dari 2025, 10 dari 2026
             let sample2024 = statsPerYear["2024"].rows.slice(0, 10).map(r => ({ ...r, _tahunRow: "2024" }));
             let sample2025 = statsPerYear["2025"].rows.slice(0, 10).map(r => ({ ...r, _tahunRow: "2025" }));
             let sample2026 = statsPerYear["2026"].rows.slice(0, 10).map(r => ({ ...r, _tahunRow: "2026" }));

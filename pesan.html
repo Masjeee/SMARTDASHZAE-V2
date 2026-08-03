@@ -82,7 +82,6 @@
             background-color: #e06d1c !important;
         }
 
-        /* Sembunyikan tombol close (X) di sidebar desktop */
         .sidebar-close-btn {
             display: none !important;
         }
@@ -96,28 +95,26 @@
         .top-bar {
             position: sticky !important;
             top: 0 !important;
-            background-color: #f8fafc !important; /* Sesuaikan dengan warna background utama halamanmu jika berbeda */
+            background-color: #f8fafc !important;
             z-index: 100 !important;
             padding-top: 20px !important;
             padding-bottom: 15px !important;
             margin-bottom: 20px !important;
-            border-bottom: 1px solid #e2e8f0; /* Opsional: garis tipis pemisah */
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Jika menggunakan Dark Mode, pastikan background top-bar ikut gelap */
         html.dark-mode .top-bar, body.dark-mode .top-bar {
             background-color: #0f172a !important;
             border-bottom: 1px solid #1e293b !important;
         }
 
         .section-title {
-        font-size: 16px !important;
-        font-weight: 700 !important;
-        color: #173B45 !important;
-        margin: 30px 0 15px 0 !important;
-    }
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            color: #173B45 !important;
+            margin: 30px 0 15px 0 !important;
+        }
 
-        /* Standarisasi Kartu Statistik / Ringkasan */
         .stat-card {
             background: #ffffff !important;
             border-radius: 12px !important;
@@ -139,7 +136,6 @@
             color: #173B45 !important;
         }
 
-        /* Standarisasi Tabel */
         table th {
             font-size: 12px !important;
             font-weight: 700 !important;
@@ -152,39 +148,16 @@
             color: #334155 !important;
             padding: 10px !important;
         }
-
     </style>
 </head>
 <body>
 
-        <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
+    <!-- Loading Overlay GIF -->
+    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.4s ease;">
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <!-- Gambar Pertama dari PNG Sequence -->
-            <img id="smartdash-animation" src="assets/animations/SMARTDASH_00000.png" alt="Loading SmartDash..." style="width: 240px; height: auto;">
+            <img src="assets/icons/SMARTDASH.gif" alt="Loading SmartDash..." style="width: 120px; height: auto;">
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const imgElement = document.getElementById('smartdash-animation');
-            if (imgElement) {
-                let currentFrame = 0;
-                const totalFrames = 209; // 00000 sampai 00209 (Total 210 frame)
-
-                // Memutar animasi PNG sequence (kecepatan ~30 fps)
-                setInterval(() => {
-                    currentFrame++;
-                    if (currentFrame > totalFrames) {
-                        currentFrame = 0; // Ulang animasi dari awal (looping)
-                    }
-                    
-                    // Format nomor file 5 digit (contoh: SMARTDASH_00015.png)
-                    let paddedNumber = String(currentFrame).padStart(5, '0');
-                    imgElement.src = `assets/animations/SMARTDASH_${paddedNumber}.png`;
-                }, 33);
-            }
-        });
-    </script>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -251,18 +224,15 @@
         <!-- Profil & Logout -->
         <div class="sidebar-footer">
             <div class="user-profile">
-                <!-- Tambahkan id="user-avatar" -->
                 <div class="user-avatar" id="user-avatar">ZA</div>
                 <div class="user-info">
-                    <!-- Tambahkan id="user-name" -->
                     <span class="user-name" id="user-name">Achmad Zaenudin</span>
-                    <!-- Tambahkan id="user-role" -->
                     <span class="user-role" id="user-role">Corporate Communications</span>
                 </div>
             </div>
             <a href="index.html" class="logout-btn">Keluar (Logout)</a>
         </div>
-        </aside>
+    </aside>
 
     <!-- KONTEN UTAMA -->
     <main class="main-content">
@@ -280,7 +250,7 @@
 
         <!-- Kategori Komplain Cards -->
         <div class="section-title">Kategori Komplain Pesan (DM)</div>
-        <div class="stats-grid">
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
             <div class="stat-card">
                 <h3>LALU LINTAS</h3>
                 <div class="value" id="val-lalin">0</div>
@@ -297,22 +267,22 @@
 
         <!-- Visualisasi Grafik -->
         <div class="section-title">Visualisasi Data Pesan (DM)</div>
-        <div class="charts-grid">
+        <div class="charts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
             <div class="chart-card">
                 <h3>Tren Pesan Masuk (DM)</h3>
-                <div class="chart-container">
+                <div class="chart-container" style="position: relative; height: 250px;">
                     <canvas id="lineChartPesan"></canvas>
                 </div>
             </div>
             <div class="chart-card">
                 <h3>Distribusi Kategori</h3>
-                <div class="chart-container">
+                <div class="chart-container" style="position: relative; height: 250px;">
                     <canvas id="donutCategoryPesan"></canvas>
                 </div>
             </div>
             <div class="chart-card">
                 <h3>Proposisi Tonality</h3>
-                <div class="chart-container">
+                <div class="chart-container" style="position: relative; height: 250px;">
                     <canvas id="donutSentimentPesan"></canvas>
                 </div>
             </div>
@@ -349,40 +319,6 @@
         let sentimentChartInst = null;
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4Jq0IJ9TbBqiANywb5WOp7A58MsSKGtAvG8TpEOm6U1QYbAo8ajRkakEOmazCiTIp/exec";
-        fetch(WEB_APP_URL)
-                .then(response => response.json())
-                .then(data => {
-                    // Pastikan mengambil data DM/pesan
-                    let rawData = data.dm || data.pesan || [];
-                    let processedData = [];
-
-                    if (rawData.length > 1) {
-                        let headers = rawData[0];
-                        for (let i = 1; i < rawData.length; i++) {
-                            let rowObj = {};
-                            headers.forEach((header, index) => {
-                                rowObj[header.trim()] = rawData[i][index];
-                            });
-
-                            // --- LOGIKA FILTER: Abaikan/Sembunyikan jika Pengirim adalah "Astra Tol Tamer" ---
-                            let pengirim = String(rowObj["Pengirim"] || rowObj["Nama"] || "").trim();
-                            if (pengirim.toLowerCase() === "astra tol tamer") {
-                                continue; // Lewati baris ini, tidak akan dimunculkan di halaman pesan
-                            }
-
-                            // Masukkan ke array jika lolos filter
-                            if (rowObj["Isi Pesan"] || rowObj["Tanggal"] || rowObj["Pengirim"]) {
-                                processedData.push(rowObj);
-                            }
-                        }
-                    }
-
-                    // Lanjutkan render data ke tabel pesan kamu di sini...
-                    renderMessageTable(processedData);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
 
         document.addEventListener('DOMContentLoaded', () => {
             // 1. Logika Sidebar
@@ -425,7 +361,7 @@
             // Inisialisasi Chart terlebih dahulu
             initChartsPesan();
 
-            // 3. FETCH DATA UTAMA (Terintegrasi Filter Astra Tol Tamer & Perbaikan Waktu 1899)
+            // 3. FETCH DATA UTAMA
             fetch(WEB_APP_URL)
                 .then(response => response.json())
                 .then(data => {
@@ -443,7 +379,7 @@
                             // --- FILTER: Sembunyikan "Astra Tol Tamer" ---
                             let pengirim = String(rowObj["Pengirim"] || rowObj["Nama"] || "").trim();
                             if (pengirim.toLowerCase().includes("astra tol tamer")) {
-                                continue; // Lewati baris ini
+                                continue; 
                             }
 
                             // --- PERBAIKAN WAKTU 1899 ---
@@ -465,17 +401,24 @@
                                     formattedWaktu = String(rawWaktu).replace(/^.*T/, '').replace(/\..*$/, '');
                                 }
                             }
-                            rowObj["Waktu"] = formattedWaktu; // Simpan waktu yang sudah bersih
+                            rowObj["Waktu"] = formattedWaktu;
 
-                            // Masukkan ke array global
                             globalPesanRows.push(rowObj);
                         }
                     }
 
-                    // Tampilkan data awal (tanpa filter tanggal atau tampilkan semua hasil bersih)
                     updateUIPesan(globalPesanRows);
                 })
-                .catch(err => console.error("Gagal memuat data pesan:", err));
+                .catch(err => console.error("Gagal memuat data pesan:", err))
+                .finally(() => {
+                    const loadingOverlay = document.getElementById('loading-overlay');
+                    if (loadingOverlay) {
+                        loadingOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                        }, 400);
+                    }
+                });
         });
 
         function initChartsPesan() {
@@ -489,11 +432,11 @@
                         data: [], 
                         borderColor: '#FF8225',          
                         backgroundColor: 'rgba(255, 130, 37, 0.1)',
-                        borderWidth: 2.5,                             
-                        fill: true,                                    
-                        tension: 0.4,                                   
+                        borderWidth: 2.5,                            
+                        fill: true,                                  
+                        tension: 0.4,                                
                         pointRadius: 0,          
-                        pointHoverRadius: 6                    
+                        pointHoverRadius: 6                  
                     }] 
                 },
                 options: { 
